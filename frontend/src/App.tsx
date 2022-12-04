@@ -1,15 +1,20 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import logo from './logo.svg';
 import './App.css';
+import logo from './songstacks.png';
 
 import LandingPage from './Pages/LandingPage';
 
 function App() {
 	return (
-		<BrowserRouter>
-			<LandingPage />
-		</BrowserRouter>
+		<>
+			{/*<div>
+				<img src={logo} />
+			</div> */}
+			<BrowserRouter>
+				<LandingPage />
+			</BrowserRouter>
+		</>
 	);
 }
 
