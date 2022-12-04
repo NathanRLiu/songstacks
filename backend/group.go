@@ -1,138 +1,86 @@
 package main
 import (
-	"strings"
-	"fmt"
+	"context"
 	"log"
 	"net/http"
-	"time"
 	"github.com/gin-gonic/gin"
-	orm "github.com/go-pg/pg/v9/orm"
-	"github.com/go-pg/pg/v9"
-	guuid "github.com/google/uuid"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"golang.org/x/crypto/bcrypt"
+	// "go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-type Event struct {
-	ID		string		`json:"id"`
-	GroupID		string		`json:"groupId"`
-	Title		string		`json:"title"`
-	Time		string		`json:"time"`
-	Date		Date		`json:"date"`
-	Description	string		`json:"description"`
-	PeopleGoing	[]string	`json:"going"`
-	PeopleNotGoing	[]string	`json:"not_going"`
+type User struct  {
+	Username	string		`json:"username"`
+	Password	string		`json:"password"`
+	Songs	string		`json:"songs"`
 }
-type Date struct {
-	Month	int8	`json:"month"`
-	Day	int8	`json:"day"`
-	Year	int16	`json:"year"`
-}
-type Group struct {
-	ID		string			`json:"id"`
-	Name		string			`json:"name"`
-	LastUpdated	time.Time		`json:"last_updated"`
-	CreatedAt	time.Time		`json:"created_at"`
-	Events		map[string][]Event	`json:"events"`
-}
-var dbConnect *pg.DB
-func InitiateDB(db *pg.DB) {
-	dbConnect = db
+type Auth struct {
+	Username	string		`json:"username"`
+	Password	string		`json:"password"`
 }
 
-func AddEvent(c *gin.Context){
-	var event Event
-	c.BindJSON(&event)
-	groupId := event.GroupID
-	log.Println(groupId)
-	group := &Group{ID: groupId}
-	err := dbConnect.Select(group)
+const uri = "mongodb+srv://cdevadhar:skry1ueRxZzmsBmr@cluster0.7dce6fw.mongodb.net/?retryWrites=true&w=majority"
+
+func Login(c *gin.Context) {
+	var body Auth
+	c.BindJSON(&body)
+	username := body.Username
+	password:= []byte(body.Password)
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 	if err != nil {
-		log.Printf("Error selecting group for AddEvent: %v\n", err)
-		c.JSON(http.StatusNotFound, gin.H{
-			"status": http.StatusNotFound,
-			"message": "Group not found",
-		})
+		log.Printf("panicking");
+		panic(err)
+	}
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			log.Printf("panicking2");
+			panic(err)
+		}
+	}()
+	coll := client.Database("auth").Collection("users")
+	var result User
+	err = coll.FindOne(context.TODO(), bson.D{{"username", username}}).Decode(&result)
+	if (err==mongo.ErrNoDocuments) {
+		c.JSON(http.StatusOK, gin.H{"Error": "No user with that username exists"})
 		return
 	}
-	events := group.Events
-	eventsForDay := events[fmt.Sprint(event.Date.Month , "/" , event.Date.Day , "/" , event.Date.Year)]
-
-	time := event.Time
-	title := event.Title
-	description := event.Description
-	id := guuid.New().String()
-	id = strings.Replace(id, "-", "", -1)
-	eventBlargh := Event{
-		ID:	id,
-		Title:	title,
-		Time:	time,
-		Description:	description,
-	}
-
-	eventsForDay = append(eventsForDay, eventBlargh)
-	group.Events[fmt.Sprint(event.Date.Month , "/" , event.Date.Day , "/" , event.Date.Year)] = eventsForDay
-	dbConnect.Model(group).
-		Column("events").
-		Where("id = ?", group.ID).
-		Update()
-	c.JSON(http.StatusCreated, gin.H{
-		"status": http.StatusCreated,
-		"message":"Todo created Successfully",
-	})
-}
-func ViewGroup(c *gin.Context){
-	group := new(Group)
-	err := dbConnect.Model(group).
-		Where("id = ?", c.Query("groupid")).
-		Select()
-	if err != nil{
-		log.Printf("view group events error: %v\n", err)
+	err = bcrypt.CompareHashAndPassword([]byte(result.Password), []byte(password))
+	if (err!=nil) {
+		c.JSON(http.StatusOK, gin.H{"Error": "Incorrect Password"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"status": http.StatusOK,
-		"message":"Group found successfully",
-		"group":group,
-	})
-	return
+	c.JSON(http.StatusOK, gin.H{"Success": "Logged in"})
 }
-func CreateGroup(c *gin.Context){
-	var group Group
-	c.BindJSON(&group)
-	name := group.Name
-	id := guuid.New().String()
-	id = strings.Replace(id, "-", "", -1)
-	insertError := dbConnect.Insert(&Group{
-		ID:	id,
-		Name:	name,
-		CreatedAt: time.Now(),
-		LastUpdated: time.Now(),
-		Events: make(map[string][]Event),
-	})
-	if insertError != nil {
-		log.Printf("Error while inserting new group into db, Reason: %v\n", insertError)
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"status": http.StatusInternalServerError,
-			"message": "Something went wrong",
-		})
+
+func Signup(c *gin.Context) {
+	var body Auth
+	c.BindJSON(&body)
+	username := body.Username
+	password:= []byte(body.Password)
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	if err != nil {
+		log.Printf("panicking");
+		panic(err)
+	}
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			log.Printf("panicking2");
+			panic(err)
+		}
+	}()
+	coll := client.Database("auth").Collection("users")
+	var result bson.M
+	err = coll.FindOne(context.TODO(), bson.D{{"username", username}}).Decode(&result)
+	if (err!=mongo.ErrNoDocuments) {
+		c.JSON(http.StatusOK, gin.H{"Error": "A user with that username already exists"})
 		return
 	}
-	c.JSON(http.StatusCreated, gin.H{
-		"status": http.StatusCreated,
-		"message":"Todo created Successfully",
-	})
-	return
-}
-
-func CreateGroupTable(db *pg.DB) error {
-	opts := &orm.CreateTableOptions{
-		IfNotExists:true,
-	}
-	createError := db.CreateTable(&Group{}, opts)
-
-	if createError!= nil{
-		log.Printf("Error while creating group table, Reason: &v`n", createError)
-		return createError
-	}
-	log.Printf("Group created")
-	return nil
+	log.Printf(err.Error())
+	hashedPassword, err := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
+	log.Printf(string(hashedPassword))
+	newUser := User{Username: username, Password: string(hashedPassword), Songs: ""}
+	coll.InsertOne(context.TODO(), newUser)
+	c.JSON(http.StatusOK, gin.H{"Success": true})
 }

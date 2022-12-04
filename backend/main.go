@@ -4,7 +4,6 @@ import (
 )
 
 func main() {
-	Connect()
 
 	r:= gin.Default()
 
