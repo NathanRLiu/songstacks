@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/crypto/bcrypt"
+	"github.com/gorilla/sessions"
 	// "go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
@@ -22,8 +23,11 @@ type Auth struct {
 }
 
 const uri = "mongodb+srv://cdevadhar:skry1ueRxZzmsBmr@cluster0.7dce6fw.mongodb.net/?retryWrites=true&w=majority"
+var key = []byte("abcdefghijklmnop")
+var sessionStore = sessions.NewCookieStore(key)
 
 func Login(c *gin.Context) {
+	session, _ := sessionStore.Get(c.Request, "session-name")
 	var body Auth
 	c.BindJSON(&body)
 	username := body.Username
@@ -51,7 +55,26 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"Error": "Incorrect Password"})
 		return
 	}
+	session.Values["username"] = username
+	session.Save(c.Request, c.Writer)
 	c.JSON(http.StatusOK, gin.H{"Success": "Logged in"})
+}
+
+func LoginGet(c *gin.Context) {
+	session, _ := sessionStore.Get(c.Request, "session-name")
+	currentUser := session.Values["username"]
+	if (currentUser==nil) {
+		c.JSON(http.StatusOK, gin.H{"Error": "Not Logged In"})
+		return
+	}
+	currUsername := currentUser.(string)
+	c.JSON(http.StatusOK, gin.H{"Current user": currUsername})
+}
+
+func Logout(c *gin.Context) {
+	session, _ := sessionStore.Get(c.Request, "session-name")
+	session.Values["username"] = nil
+	session.Save(c.Request, c.Writer)
 }
 
 func Signup(c *gin.Context) {

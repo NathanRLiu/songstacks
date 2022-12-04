@@ -4,6 +4,8 @@ import (
 )
 func Routes(router *gin.Engine){
 	router.POST("/api/login", Login)
+	router.GET("/api/login", LoginGet)
+	router.GET("/api/logout", Logout)
 	router.POST("/api/signup", Signup)
 }
 
