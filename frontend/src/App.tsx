@@ -1,9 +1,12 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import logo from './songstacks.png';
 
+
 import LandingPage from './Pages/LandingPage';
+import LoginPage from './Pages/LoginPage';
 
 function App() {
 	return (
@@ -12,7 +15,12 @@ function App() {
 				<img src={logo} />
 			</div> */}
 			<BrowserRouter>
-				<LandingPage />
+				<Routes>
+					<Route path="/">
+						<Route index element={<LandingPage />} />
+						<Route path="login" element={<LoginPage />} />
+					</Route>
+				</Routes>
 			</BrowserRouter>
 		</>
 	);
