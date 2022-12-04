@@ -1,50 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import image from '../logingraphic.png';
+import signupimage from '../signupgraphic2.png';
 import logo from '../songstacks.png';
+import LoginForm from '../Components/LoginForm';
+import SignupForm from '../Components/SignupForm';
 
 import styles from '../Styles/LoginPage.module.css'
 
 function LandingPage() {
+	const [isSignup, setIsSignup] = useState(true)
         return (
 		<>
-		<div className={styles.dallecredit}>Image generated with OpenAI Dall-E</div>
+			<div className={styles.dallecredit}>Images generated with OpenAI Dall-E. <br /> Sound wave <a href="https://www.freepik.com/free-vector/poster-sound-wave_17301774.htm#query=sound%20wave&position=8&from_view=keyword">Image by rorozoa</a> on Freepik.</div>
 		<div className={ styles.background } >
-			<div className={ styles["form-half"] }>
-				<div className={ styles["form-container"]}>
-				    <Form>
-				      <Form.Group className="mb-3" controlId="formBasicEmail">
-				      	
-				      	<h1>Login <img src={logo} className={styles["songstacks-logo"]}/></h1>
-					<Form.Label className={styles["form-label"]}>Email address</Form.Label>
-					<Form.Control className={styles["form-input"]}type="email" placeholder="Enter email" />
-					<Form.Text className="text-muted">
-					  We'll never share your email with anyone else.
-					</Form.Text>
-				      </Form.Group>
-
-				      <Form.Group className="mb-3" controlId="formBasicPassword">
-					<Form.Label className={styles["form-label"]}>Password</Form.Label>
-					<Form.Control className={styles["form-input"]} type="password" placeholder="Password" />
-				      </Form.Group>
-				      <Form.Group className="mb-3" controlId="formBasicCheckbox">
-					<Form.Check className={styles["form-label"]} type="checkbox" label="Remember me" />
-				      </Form.Group>
-				      <div className={"d-grid gap-2 "+styles["form-button-container"]}>
-					      <Button variant="outline-primary" type="submit">
-						Log in
-					      </Button>
-					      <Button variant="outline-secondary">
-						      Forgot Password
-						</Button>
+			<div className={styles["form-full"]}>
+				<div className={styles["form-scope"] +" "+ (isSignup?"":styles["animate-scope"])}>
+					<div className={ styles["form-half"] +" "+ (isSignup?"":styles["animate-form"])}>
+						<div className={ styles["form-container"]}>
+							<LoginForm />
+							<div className={styles["switch-form-prompt"]}>
+							Don't have an account? 
+								<div className={styles["switch-link-container"]}>
+								<Button onClick={()=>{setIsSignup(false)}} variant="link">Sign up.</Button>
+								</div>
+							</div>
+						</div>
 					</div>
-				    </Form>	
+					<div className={ styles["form-half-1"]  +" "+ (isSignup?"":styles["animate-form-1"])}>
+						<div className={ styles["form-container"]}>
+							<SignupForm />
+							<div className={styles["switch-form-prompt"]}>
+							Already have an account?
+								<div className={styles["switch-link-container"]}>
+								<Button onClick={()=>{setIsSignup(true)}} variant="link">Log in.</Button>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div className={styles["image-container"]}>
-				<div className={styles["image-gradient"]} />
-				<img src={image}></img>
+			<div className={styles["image-full"]}>
+				<div className={styles["image-scope"]}>
+					<div className={styles["image-half"]}>
+						<div className={styles["image-gradient"]} />
+						<img className={styles["mountain-image"]} src={signupimage}></img>
+					</div>
+					<div className={styles["image-half-1"]}>
+						<div className={styles["image-gradient-1"]} />
+						<img src={image}></img>
+					</div>
+				</div>
 			</div>
 		</div>
 		</>
