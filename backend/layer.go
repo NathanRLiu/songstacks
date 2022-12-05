@@ -18,10 +18,10 @@ import (
 
 type Layer struct {
 	_id		string
-	ParentLayer	string		`json:"parent"`
-	ChildLayers	[]string	`json:"children"`
+	ParentLayer	string		`form:"parent"`
+	ChildLayers	[]string	`form:"children"`
 	LayerAudio	[]byte	`form:"file"`
-	LayerCut	float32		`json:"desired_cut"`
+	LayerCut	float32		`form:"desired_cut"`
 }
 type getLayerReq struct {
 	layerID	string	`json:"layerid"`
@@ -52,9 +52,9 @@ func getLayer(c *gin.Context) {
 		"Layers" : layers,
 		"success": true,
 	})
+	return
 }
 func createLayer(c *gin.Context) {
-	var layer Layer
 	file_not_binary,_, _ := c.Request.FormFile("file")
 
 	buf := bytes.NewBuffer(nil)
@@ -63,9 +63,8 @@ func createLayer(c *gin.Context) {
     return 
 	}
 	file := buf.Bytes()
-	c.BindJSON(&layer)
 
-	parent := layer.ParentLayer
+	parent := c.Request.PostForm["parentid"][0]
 
 
 	//if filepath.Ext(file.Filename)
@@ -88,4 +87,5 @@ func createLayer(c *gin.Context) {
 	coll.InsertOne(context.TODO(), newLayer)
 
 	c.JSON(http.StatusOK, gin.H{"Success": true})
+	return
 }
