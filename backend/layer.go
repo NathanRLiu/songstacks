@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/bson"
 	guuid "github.com/google/uuid"
 	// "go.mongodb.org/mongo-driver/mongo/readpref"
 )
@@ -19,8 +20,37 @@ type Layer struct {
 	ParentLayer	string		`json:"parent"`
 	ChildLayers	[]string	`json:"children"`
 	LayerAudio	[]byte	`form:"file"`
-	LayerCut	float32		`json:"desired_cut"`}
+	LayerCut	float32		`json:"desired_cut"`
+}
+type getLayerReq struct {
+	layerID	string	`json:"layerid"`
+}
 
+func getLayer(c *gin.Context) {
+	//var res [][]byte
+	var request getLayerReq
+	c.BindJSON(&request)
+	layerID := request.layerID
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	coll := client.Database("songDB").Collection("layers")
+
+	var curr Layer
+	var layers []Layer
+	err = coll.FindOne(context.TODO(), bson.M{"_id": layerID}).Decode(&curr)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"Success": false})
+	}
+
+	for curr.ParentLayer != "" {
+		
+		_ = coll.FindOne(context.TODO(), bson.M{"_id": layerID}).Decode(&curr)
+		append(layers, curr)
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"Layers" : layers,
+		"success": true,
+	})
+}
 func createLayer(c *gin.Context) {
 	var layer Layer
 	file_not_binary,_, _ := c.Request.FormFile("file")
