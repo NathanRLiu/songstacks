@@ -7,5 +7,6 @@ func Routes(router *gin.Engine){
 	router.GET("/api/login", LoginGet)
 	router.GET("/api/logout", Logout)
 	router.POST("/api/signup", Signup)
+	router.POST("/api/layer/create", createLayer)
 }
 
