@@ -3,8 +3,10 @@ import (
 	"strings"
 	"context"
 	"log"
+	"bytes"
+	"io"
 	"net/http"
-	"mime/multipart"
+	//"mime/multipart"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -16,13 +18,19 @@ type Layer struct {
 	_id		string
 	ParentLayer	string		`json:"parent"`
 	ChildLayers	[]string	`json:"children"`
-	LayerAudio	*multipart.FileHeader	`form:"file"`
-	LayerCut	float32		`json:"desired_cut"`
-}
+	LayerAudio	[]byte	`form:"file"`
+	LayerCut	float32		`json:"desired_cut"`}
 
 func createLayer(c *gin.Context) {
 	var layer Layer
-	file, _ := c.FormFile("file")
+	file_not_binary,_, _ := c.Request.FormFile("file")
+
+	buf := bytes.NewBuffer(nil)
+	if _, err := io.Copy(buf, file_not_binary); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Success": false})
+    return 
+	}
+	file := buf.Bytes()
 	c.BindJSON(&layer)
 
 	parent := layer.ParentLayer
