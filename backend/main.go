@@ -9,7 +9,7 @@ func main() {
 
 	Routes(r)
 
-	r.Run(":3000")
+	r.Run(":8000")
 }
 
 
