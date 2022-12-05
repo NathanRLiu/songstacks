@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/bson"
 	guuid "github.com/google/uuid"
 	// "go.mongodb.org/mongo-driver/mongo/readpref"
@@ -28,9 +29,8 @@ type getLayerReq struct {
 
 func getLayer(c *gin.Context) {
 	//var res [][]byte
-	var request getLayerReq
-	c.BindJSON(&request)
-	layerID := request.layerID
+	layerID, _ := primitive.ObjectIDFromHex(c.Query("layerid"))
+
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 	coll := client.Database("songDB").Collection("layers")
 
@@ -39,8 +39,10 @@ func getLayer(c *gin.Context) {
 	err = coll.FindOne(context.TODO(), bson.M{"_id": layerID}).Decode(&curr)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"Success": false})
+		return
 	}
 
+		layers = append(layers, curr)
 	for curr.ParentLayer != "" {
 		
 		_ = coll.FindOne(context.TODO(), bson.M{"_id": layerID}).Decode(&curr)

@@ -8,6 +8,6 @@ func Routes(router *gin.Engine){
 	router.GET("/api/logout", Logout)
 	router.POST("/api/signup", Signup)
 	router.POST("/api/layer/create", createLayer)
-	router.GET("/api/layer/get/", createLayer)
+	router.GET("/api/layer/get/", getLayer)
 }
 
