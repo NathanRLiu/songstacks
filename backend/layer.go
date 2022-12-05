@@ -65,8 +65,7 @@ func createLayer(c *gin.Context) {
 	file := buf.Bytes()
 
 	parent := c.Request.PostForm["parentid"][0]
-
-
+	log.Printf(parent)
 	//if filepath.Ext(file.Filename)
 	client, merr := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 	if merr != nil {
@@ -79,10 +78,28 @@ func createLayer(c *gin.Context) {
 			panic(merr)
 		}
 	}()
-	coll := client.Database("songDB").Collection("layers")
-
 	id := guuid.New().String()
-        id = strings.Replace(id, "-", "", -1)
+    id = strings.Replace(id, "-", "", -1)
+	coll := client.Database("songDB").Collection("layers")
+	if (parent!="") {
+		var parentLayer Layer
+		parentID, _ := primitive.ObjectIDFromHex(parent)
+		parentErr := coll.FindOne(context.TODO(), bson.M{"_id": parentID}).Decode(&parentLayer)
+		if parentErr != nil {
+			log.Printf(parentErr.Error())
+			c.JSON(http.StatusNotFound, gin.H{"Error": "Parent layer not found"})
+			return
+		}
+		parentChildren := parentLayer.ChildLayers
+		parentChildren = append(parentChildren, id)
+		coll.UpdateOne(
+			context.TODO(),
+			bson.D{{"_id", parentID}},
+			bson.D{{"$set", bson.D{{"childLayers", parentChildren}}}},
+		)
+
+	}
+	
 	newLayer := Layer{_id:id, ParentLayer: parent, LayerAudio: file, LayerCut: 0, ChildLayers:make([]string, 0)}
 	coll.InsertOne(context.TODO(), newLayer)
 
