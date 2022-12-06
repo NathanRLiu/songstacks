@@ -16,6 +16,7 @@ function LandingPage() {
 				<div className={ styles.glow2 + " " + styles.glow } />
 				<div className={ styles.glow3 + " " + styles.glow } />
 				<div className={ styles.glow4 + " " + styles.glow } />
+				<div className={ styles.glow5 + " " + styles.glow } />
 			</div>
 			<div className={ styles["title-text"] }>
 				<h1>Introducing SongStacks.</h1>
