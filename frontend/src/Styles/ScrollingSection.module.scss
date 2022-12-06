@@ -1,7 +1,7 @@
 
 .slider {
 	width: 300px;
-	height: 500px;
+	height: 800px;
 	position: relative;
 	overflow: hidden;
 	background-color: black;
@@ -9,11 +9,10 @@
 	box-shadow: 0 10px 20px -5px rgba(0, 0, 0, .125);
 }
 
-.slide {
+.up {
 	background-color: black;
-	
 	border: solid 3px;
-	border-color: rgb(67, 18, 67);
+	border-color: #14213D;
 	height: 200px;
 	width: 200px;
 	border-radius: 20px;
@@ -23,14 +22,43 @@
 	margin-right: auto;
 	margin-top: 20px;
 	margin-bottom: 20px;
-	animation: scroll 10s linear infinite;
+	animation: scroll 20s linear infinite;
 	
 }
 
-.slider:hover .slide {
+.down {
+	background-color: black;
+	
+	border: solid 3px;
+	border-color: #14213D;
+	height: 200px;
+	width: 200px;
+	border-radius: 20px;
+	left: 0;
+	top: 0;
+	margin-left:auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: 30px;
+	animation: scrollReverse 20s linear infinite;
+	
+}
+
+.sectionHeader {
+	color: white;
+}
+.slider:hover .up {
+	animation-play-state: paused;
+}
+.slider:hover .down {
 	animation-play-state: paused;
 }
 @keyframes scroll {
 	0% { transform: translateY(0%); }
 	100% { transform: translateY(-550%)}
+}
+
+@keyframes scrollReverse {
+	0% { transform: translateY(-550%); }
+	100% { transform: translateY(0%)}
 }
