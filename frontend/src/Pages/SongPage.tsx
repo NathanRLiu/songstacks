@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import logo from '../songstacks.png';
 import { AiOutlineSearch } from 'react-icons/ai'
+import StackView from '../Components/StackView';
 
 import styles from '../Styles/SongPage.module.css'
 
@@ -56,8 +57,7 @@ const searchedLayers = [
 		"Length":"3:33",
 		"Cover":logo,
 		"Artist":"Nathan"
-	},
-	{
+	}, {
 		"Title":"Layer 1",
 		"Type":"Beat",
 		"Length":"3:33",
@@ -107,11 +107,43 @@ function SongPage() {
                         </div>
 		<div className={ styles["page-container"] } >
 			<div className={ styles["detail-editor"] }>
-			</div>
+				<h1> Publish Layer </h1>
+
+
+					<div className={styles["detail-editor-flexc"]}>
+					<div className={styles["image-upload"]}>
+						<img src={logo}/>
+					</div>
+						
+					<div>
+						<div className={styles["search-bar"]}>
+							<input
+									type="text"
+									placeholder="Title"
+							/>
+						</div>
+							<div className={styles["search-bar"]} style={{marginTop:15}}>
+								<input
+										type="text"
+										placeholder="Genre"
+								/>
+							</div>
+
+						<div className={styles["description"]}>
+							<textarea placeholder="Description"/>
+						</div>
+
+					</div>
+					</div>
+				<button type="button" className={"btn btn-outline-primary" + styles["publish-button"]}>
+					Primary
+				</button>
+				</div>
 			<div className={ styles["editor-section"] } >
 			</div>
 			<div className={ styles["stack-view-container"] }>
 				<div className={ styles["stack-view"] } >
+					<StackView />
 				</div>
 			</div>
 			<div className={ styles["layer-finder-container"] } >

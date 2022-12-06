@@ -27,11 +27,73 @@
 	border-radius:8px;
 	border: #935FA788 solid 1px;
 	margin-top:20px;
+	color:white;
 }
+.image-upload{
+	aspect-ratio:1;
+	width:50%;
+	margin-left:25px;
+	background-color:#20202066;
+	border: #935FA788 solid 1px;
+	border-radius:5px;
+}
+.detail-editor > h1{
+	margin-left:30px;
+	margin-top:20px;
+	margin-bottom:20px;
+	color:rgba(255,255,255,0.9);
+}
+.detail-editor p {
+	font-family:var(--bs-body-font-family);
+	margin-left:30px;
+}
+.detail-editor .search-bar {
+	margin-top:-10px;
+	left:10px;
+	background-color:rgba(0,0,0,0);
+	border-bottom:2px solid #932FA7;
+	padding-left:5px;
+}
+.detail-editor .description {
+	background-color: rgba(50,50,50,.2);
+	border: 1px solid #932FA7;
+	border-radius:5px;
+	width:90%;
+	margin:auto;
+	white-space:wrap;
+	margin-top:20px;
+	height:150px;
+}
+.detail-editor-flexc{
+	display:flex;
+}
+.detail-editor textarea {
+	width:100%;
+	height:100%;
+	background-color:rgba(0,0,0,0);
+	border:none;
+	color:pink;
+	padding:8px;
+}
+.detail-editor textarea:focus-visible {
+	outline:none;
+}
+.detail-editor .search-bar > input {
+	color:pink;
+	opacity:1;
+}
+.detail-editor .search-bar > input:focus-visible {
+	outline:none;
+}
+.publish-button {
+	width:100%;
+}
+
 .editor-section {
 	flex-grow:1;
 	#background-color:#04012d;
 }
+
 
 .stack-view-container{
 	grid-area:"stack";
@@ -181,3 +243,43 @@ h1{
         overflow:auto;
 	z-index:1;
 }
+	.cylinder {
+		position: relative;
+		overflow: hidden;
+		margin: 0 auto;
+		width: 100px;
+		height:200px;
+		display:flex;
+		flex-direction:column;
+		border-radius: 50px/25px;
+		background-color: rgba(160, 160, 160, .55);
+	}
+
+	.cylinder:before {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100px;
+		height: 50px;
+		border-radius: 50px/25px;
+		background-color: inherit;
+		content: '';
+	}
+	.cylinder > .not-top {
+		margin-top:-30px;
+	}
+
+	h2{
+		color:white;
+	}
+
+	.cylinder:after {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		width: 100px;
+		height: 50px;
+		border-radius: 50px/25px;
+		content: '';
+		background-color:inherit;
+	}
