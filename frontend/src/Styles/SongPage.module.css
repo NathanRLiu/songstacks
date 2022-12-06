@@ -41,4 +41,8 @@
 }
 .layer-finder{
 	background-color:orange;
+	flex-grow:1;
+}
+.layer-finder > .search {
+	width:70%;
 }
