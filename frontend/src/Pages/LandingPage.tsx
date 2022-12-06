@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, useNavigate } from 'react-router-dom';
 import { GiMicrophone } from 'react-icons/gi';
 import { HiUserGroup } from 'react-icons/hi2';
 import { ImHeadphones } from 'react-icons/im';
@@ -8,7 +8,8 @@ import logo from '../songstacks.png';
 import styles from '../Styles/LandingPage.module.css'
 
 function LandingPage() {
-        return (
+		let navigate = useNavigate();
+		return (
 		<div className={ styles.background }>
 			<div className={ styles.diffuser }>
 				<div className={ styles.glow1 + " " + styles.glow } />
@@ -43,7 +44,9 @@ function LandingPage() {
 			<div className={ styles.section3 }>
 				<h2> Ready to get started? </h2>
 				<div className={ styles.buttons }>
-					<button> Start Creating </button>
+					<button onClick={
+						() => {navigate("/login")}
+					}> Start Creating </button>
 					<button> Start Listening </button>
 				</div>
 			</div>
