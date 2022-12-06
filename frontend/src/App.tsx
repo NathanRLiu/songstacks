@@ -8,6 +8,7 @@ import logo from './songstacks.png';
 import LandingPage from './Pages/LandingPage';
 import LoginPage from './Pages/LoginPage';
 import SongPage from './Pages/SongPage';
+import Dashboard from './Pages/Dashboard';
 
 function App() {
 	return (
@@ -21,6 +22,7 @@ function App() {
 						<Route index element={<LandingPage />} />
 						<Route path="login" element={<LoginPage />} />
 						<Route path="song" element={<SongPage />} />
+						<Route path="dashboard" element={<Dashboard />} />
 					</Route>
 				</Routes>
 			</BrowserRouter>

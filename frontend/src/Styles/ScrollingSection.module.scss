@@ -1,0 +1,36 @@
+
+.slider {
+	width: 300px;
+	height: 500px;
+	position: relative;
+	overflow: hidden;
+	background-color: black;
+	align-items: center;
+	box-shadow: 0 10px 20px -5px rgba(0, 0, 0, .125);
+}
+
+.slide {
+	background-color: black;
+	
+	border: solid 3px;
+	border-color: rgb(67, 18, 67);
+	height: 200px;
+	width: 200px;
+	border-radius: 20px;
+	left: 0;
+	top: 0;
+	margin-left:auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	animation: scroll 10s linear infinite;
+	
+}
+
+.slider:hover .slide {
+	animation-play-state: paused;
+}
+@keyframes scroll {
+	0% { transform: translateY(0%); }
+	100% { transform: translateY(-550%)}
+}
