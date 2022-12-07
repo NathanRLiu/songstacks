@@ -43,7 +43,7 @@
 }
 
 .scroll-element > .album-cover-wrapper {
-	height:var(--element-width)
+	height:var(--element-width);
 	aspect-ratio:1;
 	margin-bottom:3vw;
 }
