@@ -1,0 +1,50 @@
+:root {
+  --no-of-slides: 6;
+  --slides-in-view: 4;
+	--element-width: 30vw;
+  --slide-height: 200px;
+  --iteration-time: 10s;
+}
+.slider {
+	position: relative;
+	width: var(--element-width);
+	height: 100vh;
+	overflow: hidden;
+	margin-right:3vw;
+}
+.slider:hover > .scroll-element{
+	animation-play-state:paused;
+}
+.scroll-element{
+	width: inherit;
+	transition:animation-duration;
+	height: inherit;
+	position: absolute;
+	left: 0%;
+	top: 0%;
+	display:flex;
+	flex-direction:column;
+}
+.album-cover-wrapper .hover-overlay{
+	width:100%;
+	position:absolute;
+	transition:opacity .5s ease-out;
+	height:var(--element-width);
+	content:'';
+	background-color:#000000;
+	opacity:0;
+}
+.album-cover-wrapper:hover .hover-overlay {
+	opacity:0.2;
+}
+
+.scroll-element {
+
+}
+
+.scroll-element > .album-cover-wrapper {
+	height:var(--element-width)
+	aspect-ratio:1;
+	margin-bottom:3vw;
+}
+

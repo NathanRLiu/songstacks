@@ -1,5 +1,5 @@
 import styled, { keyframes, css } from 'styled-components';
-import styles from '../Styles/ScrollingSection.module.scss';
+import styles from '../Styles/ScrollingSection.module.css';
 
 function ScrollingSection(props:{"isUp": boolean, "carouselImages":string[], "animationDuration":string}) {
 	const coverHeight = "33vw";
@@ -35,7 +35,8 @@ function ScrollingSection(props:{"isUp": boolean, "carouselImages":string[], "an
 					{
 						props.carouselImages.map( (img, i)=>
 							(
-								<div key={i}>
+								<div className={styles["album-cover-wrapper"]}key={i}>
+									<div className={styles["hover-overlay"]} />
 									<img src={img} />
 								</div>
 							)
@@ -46,7 +47,8 @@ function ScrollingSection(props:{"isUp": boolean, "carouselImages":string[], "an
 					{
 						props.carouselImages.map( (img, i)=>
 							(
-								<div key={i}>
+								<div className={styles["album-cover-wrapper"]}key={i}>
+									<div className={styles["hover-overlay"]} />
 									<img src={img} />
 								</div>
 							)
