@@ -1,45 +1,32 @@
 
 import styles from '../Styles/ScrollingSection.module.scss';
 
-function ScrollingSection(props:{"sectionHeader": string, "direction": string}) {
+function ScrollingSection(props:{"sectionHeader": string, "direction": string, "carouselImages":string[], "animationDuration":string}) {
 	return (
-		<div style={{display: "flex", flexDirection: "column", textAlign: "center", marginTop: "50px"}}>
-			<h2 className={styles.sectionHeader}>{props.sectionHeader}</h2>
-			<div className={styles.slider}>
-				<div className={styles.slidetrack}>
-					<div className={styles[props.direction]}>
-						
-					</div>
-					<div className={styles[props.direction]}>
-						
-					</div>
-					<div className={styles[props.direction]}>
-						
-					</div>
-					<div className={styles[props.direction]}>
-						
-					</div>
-					<div className={styles[props.direction]}>
-						
-					</div>
-					<div className={styles[props.direction]}>
-						
-					</div>
-					<div className={styles[props.direction]}>
-						
-					</div>
-					<div className={styles[props.direction]}>
-						
-					</div>
-					<div className={styles[props.direction]}>
-						
-					</div>
-					<div className={styles[props.direction]}>
-						
-					</div>
+			<div className={styles.slider} style={{"animationDuration":props.animationDuration}}>
+				<div className={styles[props.direction + "-primary"] + " " + styles["scroll-element"]}>
+					{
+						props.carouselImages.map( (img, i)=>
+							(
+								<div key={i}>
+									<img src={img} />
+								</div>
+							)
+						)
+					}
+				</div>
+				<div className={styles[props.direction + "-secondary"] + " " + styles["scroll-element"]}>
+					{
+						props.carouselImages.map( (img, i)=>
+							(
+								<div key={i}>
+									<img src={img} />
+								</div>
+							)
+						)
+					}
 				</div>
 			</div>
-		</div>
 		
 	)
 }
