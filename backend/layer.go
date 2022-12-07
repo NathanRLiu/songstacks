@@ -1,6 +1,6 @@
 package main
 import (
-	"strings"
+	// "strings"
 	"context"
 	"log"
 	"bytes"
@@ -12,6 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/gridfs"
 	// "go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
@@ -61,7 +62,7 @@ func createLayer(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"Success": false})
     return 
 	}
-	file := buf.Bytes()
+	// file := buf.Bytes()
 
 	parent := c.Request.PostForm["parentid"][0]
 	log.Printf(parent)
@@ -78,34 +79,71 @@ func createLayer(c *gin.Context) {
 		}
 	}()
 	objectID := primitive.NewObjectID()
-	id := objectID.Hex()
-	coll := client.Database("songDB").Collection("layers")
-	if (parent!="") {
-		var parentLayer Layer
-		parentID, _ := primitive.ObjectIDFromHex(parent)
-		parentErr := coll.FindOne(context.TODO(), bson.M{"_id": parentID}).Decode(&parentLayer)
-		if parentErr != nil {
-			log.Printf(parentErr.Error())
-			c.JSON(http.StatusNotFound, gin.H{"Error": "Parent layer not found"})
-			return
-		}
-		parentChildren := parentLayer.ChildLayers
-		parentChildren = append(parentChildren, id)
-		log.Printf(id);
-		log.Printf(strings.Join(parentChildren, " "))
-		coll.UpdateOne(
-			context.TODO(),
-			bson.D{{"_id", parentID}},
-			bson.D{{"$set", bson.D{{"childlayers", parentChildren}}}},
-		)
-
+	// id := objectID.Hex()
+	db := client.Database("songDB")
+	// coll := db.Collection("layers")
+	bucket, bucketErr := gridfs.NewBucket(db)
+	if bucketErr != nil {
+		panic(bucketErr)
 	}
+	uploadOpts := options.GridFSUpload().SetMetadata(bson.D{{"_id", objectID}})
+	_, err := bucket.UploadFromStream("song.mp3", io.Reader(file_not_binary), uploadOpts)
+	if err != nil {
+		panic(err)
+	}
+
+	// if (parent!="") {
+	// 	var parentLayer Layer
+	// 	parentID, _ := primitive.ObjectIDFromHex(parent)
+	// 	parentErr := coll.FindOne(context.TODO(), bson.M{"_id": parentID}).Decode(&parentLayer)
+	// 	if parentErr != nil {
+	// 		log.Printf(parentErr.Error())
+	// 		c.JSON(http.StatusNotFound, gin.H{"Error": "Parent layer not found"})
+	// 		return
+	// 	}
+	// 	parentChildren := parentLayer.ChildLayers
+	// 	parentChildren = append(parentChildren, id)
+	// 	log.Printf(id);
+	// 	log.Printf(strings.Join(parentChildren, " "))
+	// 	coll.UpdateOne(
+	// 		context.TODO(),
+	// 		bson.D{{"_id", parentID}},
+	// 		bson.D{{"$set", bson.D{{"childlayers", parentChildren}}}},
+	// 	)
+
+	// }
 	
-	newLayer := Layer{ID:objectID, ParentLayer: parent, LayerAudio: file, LayerCut: 0, ChildLayers:make([]string, 0)}
-	coll.InsertOne(context.TODO(), newLayer)
+	// newLayer := Layer{ID:objectID, ParentLayer: parent, LayerAudio: file, LayerCut: 0, ChildLayers:make([]string, 0)}
+	// coll.InsertOne(context.TODO(), newLayer)
 
 	c.JSON(http.StatusOK, gin.H{"Success": true})
 	return
+}
+
+func playSong(c *gin.Context) {
+	songID, _ := primitive.ObjectIDFromHex(c.Query("songid"))
+	client, merr := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	if merr != nil {
+		log.Printf("panicking");
+		panic(merr)
+	}
+	db := client.Database("songDB")
+	bucket, bucketErr := gridfs.NewBucket(db)
+	if bucketErr != nil {
+		log.Printf(bucketErr.Error())
+	}
+	downloadStream, downloadErr := bucket.OpenDownloadStream(songID)
+	if downloadErr != nil {
+		log.Printf("panicking")
+		log.Printf(downloadErr.Error())
+		
+	}
+	fileBytes := make([]byte, 1024)
+	if _, err := downloadStream.Read(fileBytes); err != nil {
+		log.Printf(err.Error())
+	}
+	
+	c.JSON(http.StatusOK, gin.H{"Song": fileBytes})
 }
 
 func getChildren(c *gin.Context) {

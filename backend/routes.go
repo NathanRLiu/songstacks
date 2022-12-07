@@ -10,5 +10,6 @@ func Routes(router *gin.Engine){
 	router.POST("/api/layer/create", createLayer)
 	router.GET("/api/layer/get/", getLayer)
 	router.GET("/api/layer/getChildren", getChildren)
+	router.GET("/api/layer/playSong", playSong)
 }
 
