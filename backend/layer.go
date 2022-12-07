@@ -106,3 +106,20 @@ func createLayer(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"Success": true})
 	return
 }
+
+func getChildren(c *gin.Context) {
+	layerID, _ := primitive.ObjectIDFromHex(c.Query("layerid"))
+
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	coll := client.Database("songDB").Collection("layers")
+
+	var curr Layer
+	err = coll.FindOne(context.TODO(), bson.M{"_id": layerID}).Decode(&curr)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"Success": false})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"children": curr.ChildLayers})
+	return
+}
