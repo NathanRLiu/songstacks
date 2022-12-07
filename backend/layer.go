@@ -2,6 +2,8 @@ package main
 import (
 	// "strings"
 	"context"
+	"fmt"
+	"os"
 	"log"
 	"bytes"
 	"io"
@@ -56,13 +58,13 @@ func getLayer(c *gin.Context) {
 	return
 }
 func createLayer(c *gin.Context) {
-	file_not_binary,_, _ := c.Request.FormFile("file")
+	data,_, _ := c.Request.FormFile("file")
 	buf := bytes.NewBuffer(nil)
-	if _, err := io.Copy(buf, file_not_binary); err != nil {
+	if _, err := io.Copy(buf, data); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Success": false})
-    return 
+	    return
 	}
-	// file := buf.Bytes()
+	 file := buf.Bytes()
 
 	parent := c.Request.PostForm["parentid"][0]
 	log.Printf(parent)
@@ -78,46 +80,29 @@ func createLayer(c *gin.Context) {
 			panic(merr)
 		}
 	}()
-	objectID := primitive.NewObjectID()
-	// id := objectID.Hex()
-	db := client.Database("songDB")
-	// coll := db.Collection("layers")
-	bucket, bucketErr := gridfs.NewBucket(db)
-	if bucketErr != nil {
-		panic(bucketErr)
-	}
-	uploadOpts := options.GridFSUpload().SetMetadata(bson.D{{"_id", objectID}})
-	_, err := bucket.UploadFromStream("song.mp3", io.Reader(file_not_binary), uploadOpts)
-	if err != nil {
-		panic(err)
-	}
+	//objectID := primitive.NewObjectID()
+    bucket, err := gridfs.NewBucket(
+        client.Database("songDB"),
+    )
+    if err != nil {
+        log.Fatal(err)
+        os.Exit(1)
+    }
+    uploadStream, err := bucket.OpenUploadStream(
+        "2390",
+    )
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+    defer uploadStream.Close()
 
-	// if (parent!="") {
-	// 	var parentLayer Layer
-	// 	parentID, _ := primitive.ObjectIDFromHex(parent)
-	// 	parentErr := coll.FindOne(context.TODO(), bson.M{"_id": parentID}).Decode(&parentLayer)
-	// 	if parentErr != nil {
-	// 		log.Printf(parentErr.Error())
-	// 		c.JSON(http.StatusNotFound, gin.H{"Error": "Parent layer not found"})
-	// 		return
-	// 	}
-	// 	parentChildren := parentLayer.ChildLayers
-	// 	parentChildren = append(parentChildren, id)
-	// 	log.Printf(id);
-	// 	log.Printf(strings.Join(parentChildren, " "))
-	// 	coll.UpdateOne(
-	// 		context.TODO(),
-	// 		bson.D{{"_id", parentID}},
-	// 		bson.D{{"$set", bson.D{{"childlayers", parentChildren}}}},
-	// 	)
-
-	// }
-	
-	// newLayer := Layer{ID:objectID, ParentLayer: parent, LayerAudio: file, LayerCut: 0, ChildLayers:make([]string, 0)}
-	// coll.InsertOne(context.TODO(), newLayer)
-
-	c.JSON(http.StatusOK, gin.H{"Success": true})
-	return
+    fileSize, err := uploadStream.Write(file)
+    if err != nil {
+        log.Fatal(err)
+        os.Exit(1)
+    }
+    log.Printf("Write file to DB was successful. File size: %d M\n", fileSize)
 }
 
 func playSong(c *gin.Context) {
