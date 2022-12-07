@@ -44,8 +44,8 @@ func getLayer(c *gin.Context) {
 
 	layers = append(layers, curr)
 	for curr.ParentLayer != "" {
-		
-		_ = coll.FindOne(context.TODO(), bson.M{"_id": layerID}).Decode(&curr)
+		parentID, _ := primitive.ObjectIDFromHex(curr.ParentLayer)
+		_ = coll.FindOne(context.TODO(), bson.M{"_id": parentID}).Decode(&curr)
 		layers = append(layers, curr)
 	}
 	c.JSON(http.StatusOK, gin.H{
