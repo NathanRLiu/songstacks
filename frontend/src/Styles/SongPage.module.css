@@ -149,7 +149,7 @@
 	position:relative;
 }
 
-h1{
+.search-results > h1{
 	color:#ccc;
 	font-size:32px;
 	margin-left:50px;
