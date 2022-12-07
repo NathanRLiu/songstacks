@@ -7,9 +7,10 @@
 }
 .slider {
 	position: relative;
-	width: 20rem;
+	width: 30vw;
 	height: 100vh;
-	overflow-y: hidden;
+	overflow: hidden;
+	margin-right:3vw;
 }
 
 .scroll-element{
@@ -18,34 +19,12 @@
 	position: absolute;
 	left: 0%;
 	top: 0%;
+	display:flex;
+	flex-direction:column;
 }
-.up-primary {
-	animation: scroll var(--iteration-time) linear infinite;
-}
-
-.down-primary {
-	animation: scroll var(--iteration-time) linear infinite reverse;
-}
-.up-secondary {
-	animation: scroll-secondary var(--iteration-time) linear infinite;
+.scroll-element > div {
+	height:30vw;
+	aspect-ratio:1;
+	margin-bottom:3vw;
 }
 
-.down-secondary {
-	animation: scroll-secondary var(--iteration-time) linear infinite reverse;
-}
-
-
-.slider:hover .up {
-	animation-play-state: paused;
-}
-.slider:hover .down {
-	animation-play-state: paused;
-}
-@keyframes scroll {
-	0% { top:0%; }
-	100% { top:-100%;}
-}
-@keyframes scroll-secondary {
-	0% { top:100%; }
-	100% { top:0%;}
-}

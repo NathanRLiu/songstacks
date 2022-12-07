@@ -1,10 +1,37 @@
-
+import styled, { keyframes, css } from 'styled-components';
 import styles from '../Styles/ScrollingSection.module.scss';
 
-function ScrollingSection(props:{"sectionHeader": string, "direction": string, "carouselImages":string[], "animationDuration":string}) {
+function ScrollingSection(props:{"isUp": boolean, "carouselImages":string[], "animationDuration":string}) {
+	const coverHeight = "33vw";
+	const scroll = [
+		keyframes`
+			0% {
+				top:0%;
+			}
+
+			100% { 
+				top:calc(${coverHeight} * -1 * ${props.carouselImages.length});
+			}
+		`, 
+		keyframes`
+			0% {
+				top: calc(${coverHeight} * ${props.carouselImages.length});
+			}
+
+			100% {
+				top: 0%;
+			}
+		`
+	]
+	const ScrollDivPrimary = styled.div`
+		animation: ${scroll[0]} ${props.animationDuration} infinite ${props.isUp?"reverse":""} linear
+	`
+	const ScrollDivSecondary = styled.div`
+		animation: ${scroll[1]} ${props.animationDuration} infinite ${props.isUp?"reverse":""} linear
+	`
 	return (
-			<div className={styles.slider} style={{"animationDuration":props.animationDuration}}>
-				<div className={styles[props.direction + "-primary"] + " " + styles["scroll-element"]}>
+			<div className={styles.slider}>
+				<ScrollDivPrimary className={styles["scroll-element"]} >
 					{
 						props.carouselImages.map( (img, i)=>
 							(
@@ -14,8 +41,8 @@ function ScrollingSection(props:{"sectionHeader": string, "direction": string, "
 							)
 						)
 					}
-				</div>
-				<div className={styles[props.direction + "-secondary"] + " " + styles["scroll-element"]}>
+				</ScrollDivPrimary>
+				<ScrollDivSecondary className={styles["scroll-element"]} >
 					{
 						props.carouselImages.map( (img, i)=>
 							(
@@ -25,7 +52,7 @@ function ScrollingSection(props:{"sectionHeader": string, "direction": string, "
 							)
 						)
 					}
-				</div>
+				</ScrollDivSecondary>
 			</div>
 		
 	)

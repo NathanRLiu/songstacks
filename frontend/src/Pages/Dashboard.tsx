@@ -42,6 +42,10 @@ const albumCovers = [
 		"artist":"Playboi Carti",
 		"info":{album:"Whole Lotta Red", size: "large"}
 	},
+	{
+		"artist":"Illenium",
+		"info":{album:"Gold (Stupid Love)", size: "large"}
+	},
 
 
 
@@ -61,11 +65,10 @@ function Dashboard() {
 		fetchData().then( ()=> setCarouselImages(res) );
 	},[])
 	return (
-		<div style={{backgroundColor: "black", display: "flex", flexDirection: "row", height:"100vh"}}>
-			<SideNav></SideNav>
-			<ScrollingSection sectionHeader="Jump Back In" direction="up" carouselImages={carouselImages} animationDuration="10s" />
-			<ScrollingSection sectionHeader="Today's Top Hits" direction="down" carouselImages={carouselImages} animationDuration="20s"/>
-			<ScrollingSection sectionHeader="Friends' Favorites" direction="up" carouselImages={[]} animationDuration="15s"/>
+		<div style={{backgroundColor: "#202020", display: "flex", flexDirection: "row", height:"100vh", paddingLeft:"3vw"}}>
+			<ScrollingSection isUp={true} carouselImages={carouselImages} animationDuration="60s" />
+			<ScrollingSection isUp={false} carouselImages={carouselImages} animationDuration="50s"/>
+			<ScrollingSection isUp={true} carouselImages={carouselImages} animationDuration="85s"/>
 		</div>
 	)
 }
