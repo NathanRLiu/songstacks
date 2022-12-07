@@ -89,7 +89,7 @@ func createLayer(c *gin.Context) {
         os.Exit(1)
     }
     uploadStream, err := bucket.OpenUploadStream(
-        "2390",
+        "2391",
     )
     if err != nil {
         fmt.Println(err)
@@ -123,12 +123,18 @@ func playSong(c *gin.Context) {
 		log.Printf(downloadErr.Error())
 		
 	}
-	fileBytes := make([]byte, 1024)
-	if _, err := downloadStream.Read(fileBytes); err != nil {
-		log.Printf(err.Error())
+
+	for true {
+		fileBytes := make([]byte, 1024)
+		if _, err := downloadStream.Read(fileBytes); err != nil {
+			log.Printf(err.Error())
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"chunk": fileBytes})
 	}
 	
-	c.JSON(http.StatusOK, gin.H{"Song": fileBytes})
+	
 }
 
 func getChildren(c *gin.Context) {
