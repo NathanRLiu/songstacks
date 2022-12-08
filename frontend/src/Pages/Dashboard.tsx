@@ -11,6 +11,10 @@ const albumCovers = [
 		"info":{album:"Graduation", size: "large"}
 	},
 	{
+		"artist":"Joji",
+		"info":{album:"Smithereens", size: "large"}
+	},
+	{
 		"artist":"Drake",
 		"info":{album:"Honestly, Nevermind", size: "large"}
 	},
@@ -34,10 +38,7 @@ const albumCovers = [
 		"artist":"Joji",
 		"info":{album:"Ballads", size: "large"}
 	},
-	{
-		"artist":"Joji",
-		"info":{album:"Smithereens", size: "large"}
-	},
+
 	{
 		"artist":"Playboi Carti",
 		"info":{album:"Whole Lotta Red", size: "large"}
@@ -46,9 +47,6 @@ const albumCovers = [
 		"artist":"Illenium",
 		"info":{album:"Gold (Stupid Love)", size: "large"}
 	},
-
-
-
 ]
 
 function Dashboard() {
