@@ -14,9 +14,9 @@ function AudioPlayer() {
 	}, []);
 	return (
 		<>
-			{<div onClick={()=> { (async() => {audio.play()})(); (async() => {audio2.play();})()} }style={{width:400,height:400, backgroundColor:"black"}} />
-
-			}
+			<audio controls>
+				<source src="/api/layer/playSong/?songid=6391418d0201cdeb851dd5d5"></source>
+			</audio>
 		</>
 	)
 	

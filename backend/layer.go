@@ -22,7 +22,6 @@ type Layer struct {
 	ID		primitive.ObjectID `bson:"_id"`
 	ParentLayer	string		`form:"parent"`
 	ChildLayers	[]string	`form:"children"`
-	LayerAudio	[]byte	`form:"file"`
 	LayerCut	float32		`form:"desired_cut"`
 }
 type getLayerReq struct {
@@ -103,6 +102,33 @@ func createLayer(c *gin.Context) {
         os.Exit(1)
     }
     log.Printf("Write file to DB was successful. File size: %d M\n", fileSize)
+
+	objectID := primitive.NewObjectID()
+	id := objectID.Hex()
+	db := client.Database("songDB")
+	coll := db.Collection("layers");
+	if (parent!="") {
+		var parentLayer Layer
+		parentID, _ := primitive.ObjectIDFromHex(parent)
+		parentErr := coll.FindOne(context.TODO(), bson.M{"_id": parentID}).Decode(&parentLayer)
+		if parentErr != nil {
+			log.Printf(parentErr.Error())
+			c.JSON(http.StatusNotFound, gin.H{"Error": "Parent layer not found"})
+			return
+		}
+		parentChildren := parentLayer.ChildLayers
+		parentChildren = append(parentChildren, id)
+		coll.UpdateOne(
+			context.TODO(),
+			bson.D{{"_id", parentID}},
+			bson.D{{"$set", bson.D{{"childlayers", parentChildren}}}},
+		)
+	}
+	newLayer := Layer{ID:objectID, ParentLayer: parent, LayerCut: 0, ChildLayers:make([]string, 0)}
+	coll.InsertOne(context.TODO(), newLayer)
+
+	c.JSON(http.StatusOK, gin.H{"Success": true})
+	return
 }
 
 func playSong(c *gin.Context) {
