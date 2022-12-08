@@ -24,7 +24,7 @@ function App() {
 						<Route path="login" element={<LoginPage />} />
 						<Route path="song" element={<SongPage />} />
 						<Route path="dashboard" element={<Dashboard />} />
-						<Route path="playSong" element={<AudioPlayer />} />
+						<Route path="playSong" element={<AudioPlayer layerID="639178c72339e4dee5fea710"/>} />
 					</Route>
 				</Routes>
 			</BrowserRouter>
