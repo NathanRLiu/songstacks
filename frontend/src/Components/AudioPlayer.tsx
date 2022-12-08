@@ -10,25 +10,43 @@ interface Layer {
 	LayerCut: Number
 }
 function AudioPlayer(props:{layerID: string}) {
-	const [layers, setLayers] = useState([]);
+
+	function togglePlay() {
+		layers.map((layer) => {
+			if (layer.paused) layer.play();
+			else layer.pause();
+		})
+			
+	}
+	function changeVolume(layerIndex: number, volume: number) {
+		let newVolumes = [...volumes];
+		newVolumes[layerIndex] = volume;
+		layers[layerIndex].volume = volume/100;
+		setVolumes(newVolumes);
+	}
+	const [layers, setLayers] = useState<HTMLAudioElement[]>([]);
+	const [volumes, setVolumes] = useState([100, 100])
 	React.useEffect(() => {
 		const getLayers = async () => {
 			const response = await axios.get(`/api/layer/get/?layerid=${props.layerID}`, { withCredentials: true });
 			console.log(response.data);
-			setLayers(response.data.Layers);
+			const layerAudios: HTMLAudioElement[] = [];
+			for (const layer of response.data.Layers) {
+				layerAudios.push(new Audio(`/api/layer/playSong/?songid=${layer.ID}`))
+			}
+			setLayers(layerAudios);
 		}
 		getLayers();
 	}, []);
 	return (
 		<>
-			{layers.map((layer:Layer) => {
-				return (
-					<audio controls>
-						<source src={`/api/layer/playSong/?songid=${layer.ID}`}></source>
-					</audio>
-				)
-			})}
+			<button onClick={()=>togglePlay()}>Play</button>
 			
+			{
+				layers.map((layer, index) => {
+					return <input type="range" min="0" max="100" value={volumes[index]} onChange={(event) => changeVolume(index, event.target.valueAsNumber)}/>
+				})
+			}
 		</>
 	)
 	
