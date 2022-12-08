@@ -123,7 +123,6 @@ func playSong(c *gin.Context) {
 		log.Printf(downloadErr.Error())
 		
 	}
-
 	for true {
 		fileBytes := make([]byte, 1024)
 		if _, err := downloadStream.Read(fileBytes); err != nil {
@@ -131,7 +130,7 @@ func playSong(c *gin.Context) {
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"chunk": fileBytes})
+		c.Data(http.StatusOK, "audio/mpeg", fileBytes)
 	}
 	
 	

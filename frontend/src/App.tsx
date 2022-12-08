@@ -9,6 +9,7 @@ import LandingPage from './Pages/LandingPage';
 import LoginPage from './Pages/LoginPage';
 import SongPage from './Pages/SongPage';
 import Dashboard from './Pages/Dashboard';
+import AudioPlayer from './Components/AudioPlayer';
 
 function App() {
 	return (
@@ -23,6 +24,7 @@ function App() {
 						<Route path="login" element={<LoginPage />} />
 						<Route path="song" element={<SongPage />} />
 						<Route path="dashboard" element={<Dashboard />} />
+						<Route path="playSong" element={<AudioPlayer />} />
 					</Route>
 				</Routes>
 			</BrowserRouter>
