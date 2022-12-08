@@ -57,7 +57,7 @@ func getLayer(c *gin.Context) {
 	return
 }
 func createLayer(c *gin.Context) {
-	data,_, _ := c.Request.FormFile("file")
+	data, fileHeader, _ := c.Request.FormFile("file")
 	buf := bytes.NewBuffer(nil)
 	if _, err := io.Copy(buf, data); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Success": false})
@@ -79,7 +79,6 @@ func createLayer(c *gin.Context) {
 			panic(merr)
 		}
 	}()
-	//objectID := primitive.NewObjectID()
     bucket, err := gridfs.NewBucket(
         client.Database("songDB"),
     )
@@ -87,9 +86,7 @@ func createLayer(c *gin.Context) {
         log.Fatal(err)
         os.Exit(1)
     }
-    uploadStream, err := bucket.OpenUploadStream(
-        "2391",
-    )
+    uploadStream, err := bucket.OpenUploadStream(fileHeader.Filename)
     if err != nil {
         fmt.Println(err)
         os.Exit(1)
@@ -103,7 +100,7 @@ func createLayer(c *gin.Context) {
     }
     log.Printf("Write file to DB was successful. File size: %d M\n", fileSize)
 
-	objectID := primitive.NewObjectID()
+	objectID, _ := uploadStream.FileID.(primitive.ObjectID)
 	id := objectID.Hex()
 	db := client.Database("songDB")
 	coll := db.Collection("layers");
