@@ -25,7 +25,7 @@
 	background-color:#20202088;
 	grid-area:"details";
 	border-radius:8px;
-	border: #935FA788 solid 1px;
+	border: #935FA718 solid 2px;
 	margin-top:20px;
 	color:white;
 }
@@ -34,7 +34,7 @@
 	width:50%;
 	margin-left:25px;
 	background-color:#20202066;
-	border: #935FA788 solid 1px;
+
 	border-radius:5px;
 }
 .detail-editor > h1{
@@ -106,7 +106,7 @@
 	background-color:#20202088;
 	height:100%;
 	border-radius:8px;
-	border: #935FA788 solid 1px;
+	border: #935FA728 solid 2px;
 }
 .layer-finder-container{
 	align-items:center;
@@ -117,7 +117,7 @@
 	grid-area:"toolbox";
 }
 .layer-finder{
-	border: #935FA788 solid 1px;
+	border: #935FA718 solid 2px;
 	background-color:#20202088;
 	height:calc(100% - 10px);
 	margin-top:10px;
@@ -127,8 +127,9 @@
 }
 .layer-finder > .header {
 	width:100%;
-	top:0px;
+	padding-top:10px;
 	height:25%;
+	padding-left:40px;
 	display:flex;
 	align-items:center;
 }

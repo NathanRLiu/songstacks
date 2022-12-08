@@ -1,0 +1,121 @@
+.second-section{
+	margin-top:20px;
+	width:10vw;
+	display:flex;
+	flex-direction:column;
+}
+.fourth-section {
+	margin-top:55px;
+}
+.second-section > .top-subsection {
+	height:30%;
+}
+.second-section > .bottom-subsection {
+	height:70%;
+}
+.side-dashboard{
+	height:100%;
+	background-color:#100c10;
+
+		  box-shadow: 0 0px 8px rgba(0,0,0,0.6), 
+		      0 0px 16px rgba(0,0,0,0.12);
+	text-align:center;
+}
+.now-playing{
+	margin-top:50px;
+}
+.now-playing > h1 {
+	font-size:32px;
+	margin-bottom:45px;
+}
+
+.now-playing > h2 {
+	margin-top:20px;
+	font-family:Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+	font-size:36px;
+	font-style:italic;
+}
+.now-playing > h3 {
+	font-family:Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+	color:white;
+	font-size:24px;
+}
+.progress-bar{
+	width:80%;
+	height:5px;
+	margin:auto;
+	background-color:gray;
+	border-radius:5px;
+	margin-top:30px;
+	overflow:hidden;
+}
+.audio-control{
+	color:white;
+	display:flex;
+	width:70%;
+	margin:auto;
+	margin-top:20px;
+	justify-content:center;
+}
+.audio-control > div{
+	font-size:50px;
+}
+
+.current-track{
+	width:80%;
+	margin-top:30px;
+	position:relative;
+	display:flex;
+	flex-direction:row;
+	flex-wrap:nowrap;
+	margin:auto;
+	margin-top:20px;
+}
+.album-art > img { 
+	position:absolute;
+	z-index:1;
+}
+
+
+.first-section {
+	margin-top:35px;
+}
+.section  h1 {
+	margin-top:10px;
+	width:100%;
+	text-align:center;
+}
+.section {
+	width:15vw;
+}
+.background {
+	background-color:#100c10;
+	display:flex;
+	flex-direction:row;
+	height:100vh;
+	overflow:hidden;
+}
+.discover {
+	display: flex;
+	flex-direction: row;
+	height:100vh; 
+	flex-grow:0;
+	column-gap:1vw;
+	overflow:hidden;
+	padding-right:1vw;
+	padding-left:2vw;
+}
+.right-tab h1 {
+	font-size:24px;
+}
+.right-tab > h1 {
+	font-size:64px;
+	color:white;
+	margin-left:40px;
+	margin-top:10px;
+}
+.right-tab {
+	background: linear-gradient(170deg, #64314d, #110512);
+	border-top-left-radius:1vw;
+	border-bottom-left-radius:1vw;
+}

@@ -1,8 +1,8 @@
 import styled, { keyframes, css } from 'styled-components';
 import styles from '../Styles/ScrollingSection.module.css';
+import { HiPlay } from 'react-icons/hi2';
 
-function ScrollingSection(props:{"isUp": boolean, "carouselImages":string[], "animationDuration":string}) {
-	const coverHeight = "33vw";
+function ScrollingSection(props:{"isUp": boolean, "carouselImages":string[], "animationDuration":string, "width":string, "marginBottom":string}) {
 	const scroll = [
 		keyframes`
 			0% {
@@ -10,12 +10,12 @@ function ScrollingSection(props:{"isUp": boolean, "carouselImages":string[], "an
 			}
 
 			100% { 
-				top:calc(${coverHeight} * -1 * ${props.carouselImages.length});
+				top:calc((${props.width} + ${props.marginBottom}) * -1 * ${props.carouselImages.length});
 			}
 		`, 
 		keyframes`
 			0% {
-				top: calc(${coverHeight} * ${props.carouselImages.length});
+				top: calc((${props.width} + ${props.marginBottom}) * ${props.carouselImages.length});
 			}
 
 			100% {
@@ -30,13 +30,15 @@ function ScrollingSection(props:{"isUp": boolean, "carouselImages":string[], "an
 		animation: ${scroll[1]} ${props.animationDuration} infinite ${props.isUp?"reverse":""} linear
 	`
 	return (
-			<div className={styles.slider}>
-				<ScrollDivPrimary className={styles["scroll-element"]} >
+			<div className={styles.slider}style={{"width":props.width}}>
+				<ScrollDivPrimary className={styles["scroll-element"]} style={{"width":props.width}} >
 					{
 						props.carouselImages.map( (img, i)=>
 							(
-								<div className={styles["album-cover-wrapper"]}key={i}>
-									<div className={styles["hover-overlay"]} />
+								<div className={styles["album-cover-wrapper"]} key={i} style={{marginBottom:props.marginBottom}}>
+									<div className={styles["hover-overlay"]} >
+										<i><HiPlay /></i>
+									</div>
 									<img src={img} />
 								</div>
 							)
@@ -47,8 +49,10 @@ function ScrollingSection(props:{"isUp": boolean, "carouselImages":string[], "an
 					{
 						props.carouselImages.map( (img, i)=>
 							(
-								<div className={styles["album-cover-wrapper"]}key={i}>
-									<div className={styles["hover-overlay"]} />
+								<div className={styles["album-cover-wrapper"]}key={i} style={{marginBottom:props.marginBottom}}>
+									<div className={styles["hover-overlay"]} >
+										<i><HiPlay /></i>
+									</div>
 									<img src={img} />
 								</div>
 							)

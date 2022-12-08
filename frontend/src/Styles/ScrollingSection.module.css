@@ -1,16 +1,13 @@
 :root {
   --no-of-slides: 6;
   --slides-in-view: 4;
-	--element-width: 30vw;
   --slide-height: 200px;
   --iteration-time: 10s;
 }
 .slider {
 	position: relative;
-	width: var(--element-width);
-	height: 100vh;
+	height:100%;
 	overflow: hidden;
-	margin-right:3vw;
 }
 .slider:hover > .scroll-element{
 	animation-play-state:paused;
@@ -27,15 +24,33 @@
 }
 .album-cover-wrapper .hover-overlay{
 	width:100%;
+	aspect-ratio:1;
 	position:absolute;
 	transition:opacity .5s ease-out;
-	height:var(--element-width);
 	content:'';
 	background-color:#000000;
 	opacity:0;
 }
 .album-cover-wrapper:hover .hover-overlay {
-	opacity:0.2;
+	opacity:0.5;
+}
+.album-cover-wrapper{
+	cursor:pointer;
+}
+.hover-overlay{
+	display:flex;
+	align-items:center;
+	justify-content:center;
+
+}
+.hover-overlay > i {
+	color:white;
+	font-size:80px;
+	width:50px;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	text-align:center;
 }
 
 .scroll-element {
@@ -43,7 +58,6 @@
 }
 
 .scroll-element > .album-cover-wrapper {
-	height:var(--element-width);
 	aspect-ratio:1;
 	margin-bottom:3vw;
 }

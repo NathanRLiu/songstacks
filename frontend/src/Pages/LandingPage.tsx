@@ -43,7 +43,7 @@ function LandingPage() {
 						</p>
 					</div>
 					<div className={ styles.card }>
-						<i className={ styles.icon }> <ImHeadphones /> </i>	
+						<i className={ styles.icon  } style={{"width":80, marginLeft:30, marginRight:10}}> <ImHeadphones /> </i>	
 						<p className={ styles.description }>
 							Discover new music from the genres you love
 						</p>

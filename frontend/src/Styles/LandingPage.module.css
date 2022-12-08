@@ -66,7 +66,7 @@
 .description-text{
 	color:white;
 	font-size:30px;
-	font-family:"Arial";
+	font-family:Futura, Trebuchet MS, Arial,;
 	margin:auto;
 	width:500px;
 	text-align:center;
@@ -98,11 +98,12 @@
 }
 .section2 > .card > .description{
 	color:white;
-	font-family:tahoma;
+	font-family:Futura, Trebuchet MS, Arial,;
 	padding:30px;
-	margin-right:10px;
 	font-size:20px;
 	overflow:scroll;
+	display:inline;
+	vertical-align:middle;
 }
 .logo > img{
 	margin:20px;
@@ -122,7 +123,7 @@
 	width:500px;
 	text-align:center;
 	margin:auto;
-	font-family:arial;
+	font-family:Futura, Trebuchet MS, Arial,;
 	font-size:40px;
 }
 .buttons > button {
