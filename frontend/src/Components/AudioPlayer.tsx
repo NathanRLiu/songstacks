@@ -2,21 +2,51 @@ import React, { useState, useEffect } from 'react';
 import { Buffer } from 'buffer';
 import ReactAudioPlayer from 'react-audio-player';
 import axios from 'axios';
-function AudioPlayer() {
-	const [audio, setAudio] = useState(new Audio());
-	const [audio2, setAudio2] = useState(new Audio());
+
+interface Layer {
+	ID: string,
+	ParentLayer: string,
+	ChildLayers: Array<string>,
+	LayerCut: Number
+}
+function AudioPlayer(props:{layerID: string}) {
+
+	function togglePlay() {
+		layers.map((layer) => {
+			if (layer.paused) layer.play();
+			else layer.pause();
+		})
+			
+	}
+	function changeVolume(layerIndex: number, volume: number) {
+		let newVolumes = [...volumes];
+		newVolumes[layerIndex] = volume;
+		layers[layerIndex].volume = volume/100;
+		setVolumes(newVolumes);
+	}
+	const [layers, setLayers] = useState<HTMLAudioElement[]>([]);
+	const [volumes, setVolumes] = useState([100, 100])
 	React.useEffect(() => {
-		const getUser = async () => {
-			(async()=>{setAudio(new Audio(`/api/layer/playSong/?songid=6391418d0201cdeb851dd5d5`))})();
-			(async()=>{setAudio2(new Audio(`/api/layer/playSong/?songid=6391418d0201cdeb851dd5d5`))})();
+		const getLayers = async () => {
+			const response = await axios.get(`/api/layer/get/?layerid=${props.layerID}`, { withCredentials: true });
+			console.log(response.data);
+			const layerAudios: HTMLAudioElement[] = [];
+			for (const layer of response.data.Layers) {
+				layerAudios.push(new Audio(`/api/layer/playSong/?songid=${layer.ID}`))
+			}
+			setLayers(layerAudios);
 		}
-		getUser();
+		getLayers();
 	}, []);
 	return (
 		<>
-			<audio controls>
-				<source src="/api/layer/playSong/?songid=6391418d0201cdeb851dd5d5"></source>
-			</audio>
+			<button onClick={()=>togglePlay()}>Play</button>
+			
+			{
+				layers.map((layer, index) => {
+					return <input type="range" min="0" max="100" value={volumes[index]} onChange={(event) => changeVolume(index, event.target.valueAsNumber)}/>
+				})
+			}
 		</>
 	)
 	
