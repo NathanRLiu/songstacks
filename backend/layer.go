@@ -33,6 +33,12 @@ func getLayer(c *gin.Context) {
 	layerID, _ := primitive.ObjectIDFromHex(c.Query("layerid"))
 	log.Printf(c.Query("layerid"))
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			log.Printf("panicking2");
+			panic(err)
+		}
+	}()
 	coll := client.Database("songDB").Collection("layers")
 
 	var curr Layer
@@ -135,6 +141,12 @@ func playSong(c *gin.Context) {
 		log.Printf("panicking");
 		panic(merr)
 	}
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			log.Printf("panicking2");
+			panic(err)
+		}
+	}()
 	db := client.Database("songDB")
 	bucket, bucketErr := gridfs.NewBucket(db)
 	if bucketErr != nil {
@@ -163,6 +175,12 @@ func getChildren(c *gin.Context) {
 	layerID, _ := primitive.ObjectIDFromHex(c.Query("layerid"))
 
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			log.Printf("panicking2");
+			panic(err)
+		}
+	}()
 	coll := client.Database("songDB").Collection("layers")
 
 	var curr Layer
