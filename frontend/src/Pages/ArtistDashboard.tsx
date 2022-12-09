@@ -1,10 +1,10 @@
 import { transform } from "typescript";
 import { useState, useEffect } from "react";
-import ScrollingSection from "../Components/ScrollingSection";
-import SideNav from "../Components/SideNav";
 import styles from '../Styles/ArtistDashboardPage.module.css';
+import { FaPlus } from 'react-icons/fa';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { BiSkipPrevious, BiSkipNext } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
+
 
 import albumArt from "album-art";
 
@@ -46,6 +46,7 @@ const requestArtistSongs = async () => {
 
 function Dashboard() {
 	const [artistSongs, setArtistSongs] = useState<Object[]>([]);
+	const navigate = useNavigate();
 	useEffect(() => {
 		let res : Object[] = [];
 		let fetchData = async () => {
@@ -68,6 +69,10 @@ function Dashboard() {
 					</div>
 				</div>
 				<div className={styles["song-list"]}>
+					<button className={styles["song-card"]} onClick={() => navigate("/song")}>
+						<i><FaPlus size="100px" color="white"/></i>
+						<h2 style={{color: "white"}}>Create New Layer</h2>
+					</button>
 					{artistSongs.map((layer:any, id)=>(
 						<div key={id} className={styles["song-card"]} >
 							<div>
