@@ -112,8 +112,14 @@ img{
 	bottom:5px;
 }
 @keyframes leftToRight{
-	from {left:0;}
-	to {left:50%;}
+	from {
+		left:0;
+		background-color:#34213d;
+	}
+	to {
+		left:50%;
+		background-color:#14213d;
+	}
 }
 @keyframes leftToLeft{
 	from {left:0%;}
@@ -131,7 +137,8 @@ img{
 	position:absolute;
 	z-index:1;
 	left:0;
-	transition:left ease-in .5s;
+	transition:ease-in .5s;
+	transition-property:left;
 }
 .animate-scope{
 	left:50%;

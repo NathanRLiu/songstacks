@@ -1,0 +1,75 @@
+.background {
+        background: linear-gradient(150deg, #64314d, #110512);
+	width:100vw;
+	height:100vh;
+	padding:40px;
+}
+
+.main-section {
+	height:80%;
+	padding:30px;
+	margin-top:20px;
+	border-radius:20px;
+}
+.background > h1 {
+	font-size:60px;
+	margin-left:20px;
+}
+.search-bar{
+        border-radius:4px;
+        border:none;
+        width:400px;
+        right:-40px;
+        position:relative;
+        height:30px;
+        background-color:#ffffffcf;
+	left:0;
+	margin-top:20px;
+}
+.header > h1 {
+	font-size:30px;
+}
+.search-bar > input {
+        background-color:#0000;
+        border:none;
+        width:90%;
+        outline-width:1px;
+}
+
+.search-bar > input:focus-visible {
+	outline:none;
+}
+.search-bar > i {
+        margin-left:10px;
+        margin-right:5px;
+}
+.song-card {
+	background-color:#202020cc;
+	width:250px;
+	height:350px;
+	border-radius:9px;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	
+}
+
+.song-card > div {
+	width:90%;
+	height:93%;
+	border:#64316d 3px solid;
+	border-radius:9px;
+}
+.song-card > div > img {
+	width:80%;
+	margin:auto;
+	display:block;
+	margin-top:10%;
+}
+.song-list {
+	margin-top:30px;
+	overflow:scroll;
+	position: absolute;
+	top: 50px;
+	bottom: 0;
+}

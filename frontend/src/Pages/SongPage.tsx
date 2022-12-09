@@ -108,8 +108,6 @@ function SongPage() {
 		<div className={ styles["page-container"] } >
 			<div className={ styles["detail-editor"] }>
 				<h1> Publish Layer </h1>
-
-
 					<div className={styles["detail-editor-flexc"]}>
 					<div className={styles["image-upload"]}>
 						<img src={logo}/>
