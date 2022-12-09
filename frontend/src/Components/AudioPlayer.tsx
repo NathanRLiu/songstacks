@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Buffer } from 'buffer';
-import ReactAudioPlayer from 'react-audio-player';
+import { WaveSurfer } from 'wavesurfer-react';
 import axios from 'axios';
 
 interface Layer {
@@ -32,7 +31,9 @@ function AudioPlayer(props:{layerID: string}) {
 			console.log(response.data);
 			const layerAudios: HTMLAudioElement[] = [];
 			for (const layer of response.data.Layers) {
-				layerAudios.push(new Audio(`/api/layer/playSong/?songid=${layer.ID}`))
+				let layerAudio = new Audio(`/api/layer/playSong/?songid=${layer.ID}`);
+				layerAudio.volume = 1;
+				layerAudios.push(layerAudio)
 			}
 			setLayers(layerAudios);
 		}
@@ -41,7 +42,7 @@ function AudioPlayer(props:{layerID: string}) {
 	return (
 		<>
 			<button onClick={()=>togglePlay()}>Play</button>
-			
+			<WaveSurfer onMount={()=>{}}/>
 			{
 				layers.map((layer, index) => {
 					return <input type="range" min="0" max="100" value={volumes[index]} onChange={(event) => changeVolume(index, event.target.valueAsNumber)}/>
