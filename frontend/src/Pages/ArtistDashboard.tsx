@@ -14,6 +14,31 @@ const requestArtistSongs = async () => {
 			"layerid":"fewofjfioejTHISISTHEIDjewoifjaioefj",
 			"layerName":"My Layer",
 			"layerImage":"https://i.scdn.co/image/ab67616d0000b2731dacfbc31cc873d132958af9",
+		},
+		{
+			"layerid":"fewofjfioejTHISISTHEIDjewoifjaioefj",
+			"layerName":"My Layer",
+			"layerImage":"https://i.scdn.co/image/ab67616d0000b2731dacfbc31cc873d132958af9",
+		},
+		{
+			"layerid":"fewofjfioejTHISISTHEIDjewoifjaioefj",
+			"layerName":"My Layer",
+			"layerImage":"https://i.scdn.co/image/ab67616d0000b2731dacfbc31cc873d132958af9",
+		},
+		{
+			"layerid":"fewofjfioejTHISISTHEIDjewoifjaioefj",
+			"layerName":"My Layer",
+			"layerImage":"https://i.scdn.co/image/ab67616d0000b2731dacfbc31cc873d132958af9",
+		},
+		{
+			"layerid":"fewofjfioejTHISISTHEIDjewoifjaioefj",
+			"layerName":"My Layer",
+			"layerImage":"https://i.scdn.co/image/ab67616d0000b2731dacfbc31cc873d132958af9",
+		},
+		{
+			"layerid":"fewofjfioejTHISISTHEIDjewoifjaioefj",
+			"layerName":"My Layer",
+			"layerImage":"https://i.scdn.co/image/ab67616d0000b2731dacfbc31cc873d132958af9",
 		}
 	]
 	return res
@@ -41,15 +66,15 @@ function Dashboard() {
 						placeholder="Search Layers"
 						/>
 					</div>
-					<div className={styles["song-list"]}>
-						{artistSongs.map((layer:any, id)=>(
-							<div key={id} className={styles["song-card"]} >
-								<div>
-									<img src={layer["layerImage"]} />
-								</div>
+				</div>
+				<div className={styles["song-list"]}>
+					{artistSongs.map((layer:any, id)=>(
+						<div key={id} className={styles["song-card"]} >
+							<div>
+								<img src={layer["layerImage"]} />
 							</div>
-						))}
-					</div>
+						</div>
+					))}
 				</div>
 			</div>
 		</div>
