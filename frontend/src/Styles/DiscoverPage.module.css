@@ -19,6 +19,9 @@
 		      0 0px 16px rgba(0,0,0,0.12);
 	text-align:center;
 }
+.play{
+	cursor:pointer;
+}
 .now-playing{
 	margin-top:50px;
 }
@@ -119,3 +122,17 @@
 	border-top-left-radius:1vw;
 	border-bottom-left-radius:1vw;
 }
+.audio-waves {
+	overflow:scroll;
+	padding-left:25px;
+	padding-right:25px;
+}
+input[type=range] {
+  height: 25px;
+  width: 40%;
+  background:rgba(0,0,0,0);
+  margin-left:30%;
+  transform:translateY(5px);
+  accent-color:#94316d;
+}
+

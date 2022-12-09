@@ -10,6 +10,7 @@ import LoginPage from './Pages/LoginPage';
 import SongPage from './Pages/SongPage';
 import Discover from './Pages/Discover';
 import AudioPlayer from './Components/AudioPlayer';
+import AudioWave from './Components/AudioWave';
 import ArtistDashboard from './Pages/ArtistDashboard';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
 						<Route path="discover" element={<Discover />} />
 						<Route path="playSong" element={<AudioPlayer layerID="639195396a87541d9f68c848"/>} />
 						<Route path="dashboard" element={<ArtistDashboard />} />
+						<Route path="wave"  element={<AudioWave layerID="639195396a87541d9f68c848" width={920} isPlaying={false} />}  />
 					</Route>
 				</Routes>
 			</BrowserRouter>

@@ -1,0 +1,25 @@
+.wave-container > wave{
+	overflow:visible !important;
+
+}
+.wave-container-container:before{
+	height:1px;
+	width:inherit;
+	position:absolute;
+	left:0px;
+	top:50%;
+	background:linear-gradient(90deg, #ee0979, #ff6a00, yellow);
+	opacity:0.1;
+	content:"";
+}
+.wave-container{
+	position:relative;
+}
+
+.wave-container-container{
+	#display:flex;
+	width:100%;
+	position:relative;
+	#justify-items:center;
+	#justify-content:center;
+}

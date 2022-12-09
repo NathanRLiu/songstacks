@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {useNavigate} from 'react-router-dom'
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import image from '../logingraphic.png';
@@ -9,7 +10,7 @@ import SignupForm from '../Components/SignupForm';
 import axios from 'axios';
 import styles from '../Styles/LoginPage.module.css'
 
-function LandingPage() {
+function LoginPage() {
 	const navigate = useNavigate();
 	const [isSignup, setIsSignup] = useState(true)
 	const [email, setEmail] = useState('');
@@ -86,4 +87,4 @@ function LandingPage() {
 	);
 }
 
-export default LandingPage;
+export default LoginPage;

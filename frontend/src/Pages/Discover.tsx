@@ -3,12 +3,48 @@ import { useState, useEffect } from "react";
 import ScrollingSection from "../Components/ScrollingSection";
 import SideNav from "../Components/SideNav";
 import styles from '../Styles/DiscoverPage.module.css';
-import { FaPlayCircle } from 'react-icons/fa';
+import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
 import { BiSkipPrevious, BiSkipNext } from 'react-icons/bi';
+import AudioWave from '../Components/AudioWave';
+import JavasPlan from '../javasplan.png'
 
 import albumArt from "album-art";
 
 
+function LeftPanel(){
+	const [isPlaying, setPlaying] = useState(false);
+	return(
+		<div className={styles["side-dashboard"]}>
+			<div className={styles["now-playing"]}>
+				<h1> Now Playing </h1>
+				<div className={styles["current-track"]}>
+					<img src={JavasPlan} />
+				</div>
+				<h2> {"Java's Plan"}</h2>
+				<h3> Samih R Liu</h3>
+
+				<div className={styles["progress-bar"]}>
+					<div style={{width:"70%", height:"100%",left:0, backgroundColor:"white"}} />
+				</div>
+				<div className={styles["audio-control"]} >
+					<div className={styles["prev-track"]}> <BiSkipPrevious /> </div>
+					<div 
+						className={styles.play}
+						onClick={()=>{setPlaying(!isPlaying)}}
+					> 
+						{!isPlaying && <FaPlayCircle />}
+						{isPlaying && <FaPauseCircle />}
+					</div>
+					<div className={styles["next-track"]}> <BiSkipNext /> </div>
+				</div>
+				<div className={styles["audio-waves"]}>
+					<AudioWave layerID="639195396a87541d9f68c848" width={250} isPlaying={isPlaying}/>
+				</div>
+			</div>
+			
+		</div>
+	)
+}
 function Dashboard() {
 	const [images_recent, setCarouselImages] = useState<string[]>([]);
 	const [images_popular, setPopularImages] = useState<string[]>([]);
@@ -54,27 +90,7 @@ function Dashboard() {
 	},[])
 	return (
 		<div className={styles["background"]}>
-			
-			<div className={styles["side-dashboard"]}>
-				<div className={styles["now-playing"]}>
-					<h1> Now Playing </h1>
-					<div className={styles["current-track"]}>
-						<img src={images_recent[3]} />
-					</div>
-					<h2> {"Crooked Smile"}</h2>
-					<h3> J. Cole</h3>
-
-					<div className={styles["progress-bar"]}>
-						<div style={{width:"70%", height:"100%",left:0, backgroundColor:"white"}} />
-					</div>
-					<div className={styles["audio-control"]} >
-						<div className={styles["prev-track"]}> <BiSkipPrevious /> </div>
-						<div className={styles.play}> <FaPlayCircle /> </div>
-						<div className={styles["next-track"]}> <BiSkipNext /> </div>
-					</div>
-				</div>
-				
-			</div>
+			<LeftPanel />	
 			<div className={styles["right-tab"]}>
 				<h1>Discover</h1>
 				<div className={styles["discover"]}>
