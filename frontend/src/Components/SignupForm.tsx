@@ -5,8 +5,15 @@ import image from '../logingraphic.png';
 import logo from '../songstacks.png';
 
 import styles from '../Styles/LoginPage.module.css'
+interface FormInput {
+	email: string;
+	setEmail: Function;
+	password: string;
+	setPassword: Function;
+	onSubmit: Function;
+}
 
-function LoginForm() {
+function SignupForm(props:FormInput) {
         return (
 		<>
 		    <Form>
@@ -34,13 +41,13 @@ function LoginForm() {
 			<Form.Check className={styles["form-label"]} type="checkbox" label="Opt in to receive promotional emails" />
 		      </Form.Group>
 		      <div className={"d-grid gap-2 "+styles["form-button-container"]}>
-			      <Button variant="outline-primary" type="submit">
-				Register
-			      </Button>
+			  <Button variant="outline-primary" type="submit" onClick={()=> props.onSubmit()}>
+					Log in
+			    </Button>
 			</div>
 		    </Form>	
 		</>
         );
 }
 
-export default LoginForm;
+export default SignupForm;

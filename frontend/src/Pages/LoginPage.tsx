@@ -10,6 +10,7 @@ import axios from 'axios';
 import styles from '../Styles/LoginPage.module.css'
 
 function LandingPage() {
+	const navigate = useNavigate();
 	const [isSignup, setIsSignup] = useState(true)
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -27,6 +28,7 @@ function LandingPage() {
 		}
 		else {
 			//redirect to dashboard
+			navigate('/discover');
 		}
 	}
 	React.useEffect(() => {
@@ -56,7 +58,7 @@ function LandingPage() {
 					</div>
 					<div className={ styles["form-half-1"]  +" "+ (isSignup?"":styles["animate-form-1"])}>
 						<div className={ styles["form-container"]}>
-							<SignupForm />
+							<SignupForm email={email} setEmail={setEmail} password={password} setPassword={setPassword} onSubmit={onSubmit}/>
 							<div className={styles["switch-form-prompt"]}>
 							Already have an account?
 								<div className={styles["switch-link-container"]}>

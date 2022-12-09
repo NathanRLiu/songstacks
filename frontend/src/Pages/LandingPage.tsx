@@ -53,9 +53,11 @@ function LandingPage() {
 					<h2> Ready to get started? </h2>
 					<div className={ styles.buttons }>
 						<button onClick={
-							() => {navigate("/login")}
+							() => navigate("/login")
 						}> Start Creating </button>
-						<button> Start Listening </button>
+						<button onClick={
+							() => navigate("/login")}
+						> Start Listening </button>
 					</div>
 				</div>
 			</div>
