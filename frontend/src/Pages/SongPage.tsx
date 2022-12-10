@@ -90,7 +90,6 @@ function SongCard({ Title, Type, Length, Cover, Artist }: SongCardProps) {
 				<div className={styles["track-artist"]}>{Artist}</div>
 				<div className={styles["track-type"]}>{Type}</div>
 			</div>
-
 		</div>
 	)
 }
@@ -148,8 +147,7 @@ function SongPage() {
 				<div className={ styles["layer-finder"] } >
 					<div className={styles["header"]}>
 						<h1>Public Layers</h1>
-						<div className={styles["search-bar"]}>
-							<i><AiOutlineSearch /></i>
+						<div className={styles["search-bar"]}> <i><AiOutlineSearch /></i>
 							<input
 							    type="text"
 							    placeholder="Search..."
