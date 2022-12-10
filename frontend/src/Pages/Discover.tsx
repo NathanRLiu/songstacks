@@ -11,6 +11,8 @@ import JavasPlan from '../javasplan.png'
 import logo from '../songstacks.png'
 import { AiOutlineSearch } from "react-icons/ai";
 import albumArt from "album-art";
+import { useNavigate } from "react-router-dom";
+import NavBar from "../Components/NavBar";
 
 interface searchResults {
 	results: Array<Object>
@@ -189,34 +191,14 @@ function SearchDisplay(props: {searchTerm: string, setDisplaySearch: Function}) 
 	)
 }
 function Dashboard() {
-	
-	const [displaySearch, setDisplaySearch] = useState(true);
+	const navigate = useNavigate();
+	const [displaySearch, setDisplaySearch] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
 	return (
 		<div className={styles["background"]}>
 			<LeftPanel />	
 			<div className={styles["right-tab"]}>
-				<div className={styles["discover-nav-bar"]}>
-					<div className={styles["create-nav-bar"]}>
-						<h2>
-							Listen
-						</h2>
-					</div>
-					<div className={styles["dashboard-nav-bar"]}>
-						<h2>
-							Dashboard
-						</h2>
-					</div>
-					<div className={styles["create-nav-bar"]}>
-						<h2>
-							Create
-						</h2>
-					</div>
-
-					<div className={styles["nav-logo"]}>
-						<img src={logo} />
-					</div>
-				</div>
+				<NavBar />
 				<h1> Discover </h1>
 				<div className={styles["searchBar"]}>
 					<i><AiOutlineSearch /></i>

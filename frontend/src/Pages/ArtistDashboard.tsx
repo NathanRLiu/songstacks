@@ -4,9 +4,8 @@ import styles from '../Styles/ArtistDashboardPage.module.css';
 import { FaPlus } from 'react-icons/fa';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
-
-
-import albumArt from "album-art";
+import NavBar from "../Components/NavBar";
+import logo from "../songstacks.png";
 
 const requestArtistSongs = async () => {
 	let res = [
@@ -56,7 +55,9 @@ function Dashboard() {
 	},[])
 	return (
 		<div className={styles["background"]}>
+			<NavBar />
 			<h1>Artist Dashboard</h1>
+			
 			<div className={styles["main-section"]}>
 				<div className={styles["header"]}>
 					<h1> Your Layers </h1>

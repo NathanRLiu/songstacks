@@ -2,20 +2,20 @@
     background: linear-gradient(150deg, #64314d, #110512);
 	width:100vw;
 	height:100vh;
-	padding:40px;
 	overflow:hidden;
 }
 
 .main-section {
 	height:90%;
-	padding:30px;
+	padding-left:50px;
 	margin-top:20px;
 	border-radius:20px;
 	overflow:hidden;
 }
 .background > h1 {
 	font-size:60px;
-	margin-left:20px;
+	margin-left:50px;
+	margin-top: 40px;
 }
 .search-bar{
 	border-radius:4px;
@@ -78,4 +78,34 @@
 	flex-direction: row;
 	flex-wrap: wrap;
 	overflow:scroll;
+}
+
+.discover-nav-bar {
+	padding-top:15px;
+	display:flex;
+	flex-direction:row;
+	color:white;
+	position:relative;
+	vertical-align:center;
+	align-items:center;
+	gap:20px;
+	font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+	float:right;
+	padding-right:60px;
+}
+.discover-nav-bar > button { 
+	all: unset;
+	vertical-align:middle;
+	margin-left:20px;
+	cursor: pointer;
+}
+.discover-nav-bar > button > h2 {
+	vertical-align:middle;
+	display:inline;
+	font-size:20px;
+}
+.nav-logo {
+	width:50px;
+	margin-left:20px;
+	position:relative;
 }
