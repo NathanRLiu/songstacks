@@ -11,7 +11,7 @@
 	z-index:2;
 	position:relative;
   display: grid;
-  grid-template-columns: .35fr 1fr;
+  grid-template-columns: 500px 1fr;
   grid-template-rows: 2fr 1fr;
   height:100%;
   grid-template-areas:
@@ -62,7 +62,7 @@
 	margin:auto;
 	white-space:wrap;
 	margin-top:20px;
-	height:150px;
+	height:130px;
 }
 .detail-editor-flexc{
 	display:flex;
@@ -87,7 +87,20 @@
 	outline:none;
 }
 .publish-button {
-	width:100%;
+	margin-left:20px;
+	width:90%;
+	height:40px;
+	color:pink;
+	border:2px solid purple;
+	background-color:#932fa7;
+	outline:none;
+	border-radius:5px;
+}
+.publish-button:hover {
+	background-color:#9f2faf;
+}
+.publish-button:active {
+	background-color:#922ea6;
 }
 
 .editor-section {

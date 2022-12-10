@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Route, useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -95,6 +95,10 @@ function SongCard({ Title, Type, Length, Cover, Artist }: SongCardProps) {
 }
 function SongPage() {
 	let navigate = useNavigate();
+	const [ title, setTitle ] = useState("");
+	const [ genre, setGenre ] = useState("");
+
+	const [ description, setDescription ] = useState("");
 	return (
 	<div className={ styles.background } >
 		<div className={ styles.diffuser }>
@@ -107,7 +111,7 @@ function SongPage() {
 		<div className={ styles["page-container"] } >
 			<div className={ styles["detail-editor"] }>
 				<h1> Publish Layer </h1>
-					<div className={styles["detail-editor-flexc"]}>
+				<div className={styles["detail-editor-flexc"]}>
 					<div className={styles["image-upload"]}>
 						<img src={logo}/>
 					</div>
@@ -117,25 +121,37 @@ function SongPage() {
 							<input
 									type="text"
 									placeholder="Title"
+									value={title}
+									onChange={
+										(event) => {setTitle(event.target.value)}
+									}
 							/>
 						</div>
-							<div className={styles["search-bar"]} style={{marginTop:15}}>
-								<input
-										type="text"
-										placeholder="Genre"
-								/>
-							</div>
+						<div className={styles["search-bar"]} style={{marginTop:40}}>
+							<input
+									type="text"
+									placeholder="Genre"
+									value={genre}
+									onChange={
+										(event)=>{setGenre(event.target.value)}
+									}
+							/>
+						</div>
 
 						<div className={styles["description"]}>
 							<textarea placeholder="Description"/>
 						</div>
-
 					</div>
-					</div>
-				<button type="button" className={"btn btn-outline-primary" + styles["publish-button"]}>
-					Primary
-				</button>
 				</div>
+				<div style={{"margin":30}}>
+						<input
+								type="file"
+						/>
+				</div>
+				<button className={styles["publish-button"]}>
+					Publish
+				</button>
+			</div>
 			<div className={ styles["editor-section"] } >
 			</div>
 			<div className={ styles["stack-view-container"] }>
