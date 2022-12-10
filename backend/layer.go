@@ -20,6 +20,7 @@ import (
 
 type Layer struct {
 	ID		primitive.ObjectID `bson:"_id"`
+	Name		string		`form:"name"`
 	ParentLayer	string		`form:"parent"`
 	ChildLayers	[]string	`form:"children"`
 	LayerCut	float32		`form:"desired_cut"`
@@ -191,5 +192,28 @@ func getChildren(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"children": curr.ChildLayers})
+	return
+}
+
+func searchLayer(c *gin.Context) {
+	name := c.Query("search");
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			log.Printf("panicking2");
+			panic(err)
+		}
+	}()
+	coll := client.Database("songDB").Collection("layers")
+	filter := bson.D{{"name", primitive.Regex{Pattern: name, Options: ""}}}
+	var resultsArray []Layer
+	searchResult, err := coll.Find(context.TODO(), filter)
+	if err != nil {
+		log.Printf(err.Error())
+		c.JSON(http.StatusOK, gin.H{"Error": "No Results Found"});
+		return
+	}
+	searchResult.All(context.TODO(), &resultsArray);
+	c.JSON(http.StatusOK, gin.H{"searchResults": resultsArray})
 	return
 }
