@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import logo from '../songstacks.png';
 import { AiOutlineSearch } from 'react-icons/ai'
 import StackView from '../Components/StackView';
-
+import NavBar from '../Components/NavBar';
 import styles from '../Styles/SongPage.module.css'
 
 const searchedLayers = [
@@ -101,13 +101,14 @@ function SongPage() {
 	const [ description, setDescription ] = useState("");
 	return (
 	<div className={ styles.background } >
+		<NavBar />
 		<div className={ styles.diffuser }>
-                                <div className={ styles.glow1 + " " + styles.glow } />
-                                <div className={ styles.glow2 + " " + styles.glow } />
-                                <div className={ styles.glow3 + " " + styles.glow } />
-                                <div className={ styles.glow4 + " " + styles.glow } />
-                                <div className={ styles.glow5 + " " + styles.glow } />
-                        </div>
+			<div className={ styles.glow1 + " " + styles.glow } />
+			<div className={ styles.glow2 + " " + styles.glow } />
+			<div className={ styles.glow3 + " " + styles.glow } />
+			<div className={ styles.glow4 + " " + styles.glow } />
+			<div className={ styles.glow5 + " " + styles.glow } />
+		</div>
 		<div className={ styles["page-container"] } >
 			<div className={ styles["detail-editor"] }>
 				<h1> Publish Layer </h1>
@@ -184,7 +185,7 @@ function SongPage() {
 						}
 					</div>
 				</div>
-			</div>
+			</div> 
 		</div>
 	</div>
 	);

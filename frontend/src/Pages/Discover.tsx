@@ -3,15 +3,20 @@ import { useState, useEffect } from "react";
 import ScrollingSection from "../Components/ScrollingSection";
 import SideNav from "../Components/SideNav";
 import styles from '../Styles/DiscoverPage.module.css';
+import axios from "axios";
 import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
 import { BiSkipPrevious, BiSkipNext } from 'react-icons/bi';
 import AudioWave from '../Components/AudioWave';
 import JavasPlan from '../javasplan.png'
 import logo from '../songstacks.png'
-
+import { AiOutlineSearch } from "react-icons/ai";
 import albumArt from "album-art";
+import { useNavigate } from "react-router-dom";
+import NavBar from "../Components/NavBar";
 
-
+interface searchResults {
+	results: Array<Object>
+}
 function LeftPanel(){
 	const [isPlaying, setPlaying] = useState(false);
 	const [trackLength, setTrackLength] = useState(1);
@@ -74,7 +79,7 @@ function LeftPanel(){
 		</div>
 	)
 }
-function Dashboard() {
+function DiscoverDisplay() {
 	const [images_recent, setCarouselImages] = useState<string[]>([]);
 	const [images_popular, setPopularImages] = useState<string[]>([]);
 	const [images_roadtrip, setRoadtripImages] = useState<string[]>([]);
@@ -117,60 +122,97 @@ function Dashboard() {
 		}
 		fetchData().then( ()=> setClassicImages(res4) );
 	},[])
+
+	return (
+		<div className={styles["discover"]}>
+			<div className={styles["third-section"] + " " + styles["section"]}>
+				<h1> Currently Trending </h1>
+				<ScrollingSection isUp={false} carouselImages={images_popular} animationDuration="60s" width="15vw" marginBottom="1vw"/>
+			</div>
+
+			<div className={styles["first-section"] + " " + styles["section"]}>
+				<h1>Resume Playing</h1>
+				<ScrollingSection isUp={true} carouselImages={images_recent} animationDuration="50s" width="15vw" marginBottom="1vw"/>
+			</div>
+
+			<div className={styles["second-section"] + " " + styles["section"]}>
+				<h1>Hit The Road</h1>
+				<div className={styles["top-subsection"]}>
+					<ScrollingSection isUp={false} carouselImages={images_roadtrip} animationDuration="85s" width="15vw" marginBottom="1vw"/>
+				</div>
+				</div>
+			<div className={styles["fourth-section"] + " " + styles["section"]}>
+				<h1>SongStacks' Featured</h1>
+				<ScrollingSection isUp={true} carouselImages={images_recent} animationDuration="85s" width="15vw" marginBottom="1vw"/>
+			</div>
+			<div className={styles["fifth-section"] + " " + styles["section"]}>
+				<h1>Timeless Classics</h1>
+				<div className={styles["bottom-subsection"]}>
+					<ScrollingSection isUp={false} carouselImages={images_classic} animationDuration="95s" width="15vw" marginBottom="1vw"/>
+				</div>
+			</div>
+		</div>
+	)
+}
+function SearchDisplay(props: {searchTerm: string, setDisplaySearch: Function}) {
+	const [searchResults, setSearchResults] = useState<any[]>([]);
+	useEffect(() => {
+		if (props.searchTerm=='') {
+			return;
+		}
+		const getUser = async () => {
+			const response = await axios.get(`/api/layer/search/?search=${props.searchTerm}`, { withCredentials: true });
+			console.log(response.data);
+			if (response.data==null) {
+				setSearchResults([]);
+				return;
+			}
+			setSearchResults(response.data.searchResults);
+		}
+		getUser();
+	}, [props.searchTerm])
+	return (
+		<div style={{display: "flex", flexDirection: "row", margin: "25px"}}>
+			{
+				searchResults!=null ? searchResults.map((result, id) => {
+					return (
+						<div key={id} className={styles["song-card"]} >
+							<div>
+								<img src={JavasPlan} />
+								<h2>{result.Name}</h2>
+							</div>
+							
+						</div>
+					)
+				}):
+				<h3 className={styles.searchError}>Sorry, we couldn't find anything with that name.</h3>
+			}
+		</div>
+	)
+}
+function Dashboard() {
+	const navigate = useNavigate();
+	const [displaySearch, setDisplaySearch] = useState(false);
+	const [searchTerm, setSearchTerm] = useState("");
 	return (
 		<div className={styles["background"]}>
 			<LeftPanel />	
 			<div className={styles["right-tab"]}>
-				<div className={styles["discover-nav-bar"]}>
-					<div className={styles["create-nav-bar"]}>
-						<h2>
-							Listen
-						</h2>
-					</div>
-					<div className={styles["dashboard-nav-bar"]}>
-						<h2>
-							Dashboard
-						</h2>
-					</div>
-					<div className={styles["create-nav-bar"]}>
-						<h2>
-							Create
-						</h2>
-					</div>
-
-					<div className={styles["nav-logo"]}>
-						<img src={logo} />
-					</div>
-				</div>
+				<NavBar />
 				<h1> Discover </h1>
-				<div className={styles["discover"]}>
-					<div className={styles["third-section"] + " " + styles["section"]}>
-						<h1> Currently Trending </h1>
-						<ScrollingSection isUp={false} carouselImages={images_popular} animationDuration="60s" width="15vw" marginBottom="1vw"/>
-					</div>
-
-					<div className={styles["first-section"] + " " + styles["section"]}>
-						<h1>Resume Playing</h1>
-						<ScrollingSection isUp={true} carouselImages={images_recent} animationDuration="50s" width="15vw" marginBottom="1vw"/>
-					</div>
-
-					<div className={styles["second-section"] + " " + styles["section"]}>
-						<h1>Hit The Road</h1>
-						<div className={styles["top-subsection"]}>
-							<ScrollingSection isUp={false} carouselImages={images_roadtrip} animationDuration="85s" width="15vw" marginBottom="1vw"/>
-						</div>
-						</div>
-					<div className={styles["fourth-section"] + " " + styles["section"]}>
-						<h1>SongStacks' Featured</h1>
-						<ScrollingSection isUp={true} carouselImages={images_recent} animationDuration="85s" width="15vw" marginBottom="1vw"/>
-					</div>
-					<div className={styles["fifth-section"] + " " + styles["section"]}>
-		<h1>Timeless Classics</h1>
-						<div className={styles["bottom-subsection"]}>
-							<ScrollingSection isUp={false} carouselImages={images_classic} animationDuration="95s" width="15vw" marginBottom="1vw"/>
-						</div>
+				<div className={styles["searchBar"]}>
+					<i><AiOutlineSearch /></i>
+					<input
+						type="text"
+						placeholder="Search..."
+						onChange={(event) => {
+							setSearchTerm(event.target.value);
+							if (event.target.value=="") setDisplaySearch(false);
+							else setDisplaySearch(true);
+						}}
+					/>
 				</div>
-				</div>
+				{displaySearch ? <SearchDisplay searchTerm={searchTerm} setDisplaySearch={setDisplaySearch}/> : <DiscoverDisplay />}
 			</div>
 		</div>
 	)

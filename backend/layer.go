@@ -73,7 +73,8 @@ func createLayer(c *gin.Context) {
 	 file := buf.Bytes()
 
 	parent := c.Request.PostForm["parentid"][0]
-	log.Printf(parent)
+	name := c.Request.PostForm["name"][0]
+	log.Printf(name)
 	//if filepath.Ext(file.Filename)
 	client, merr := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 	if merr != nil {
@@ -128,7 +129,7 @@ func createLayer(c *gin.Context) {
 			bson.D{{"$set", bson.D{{"childlayers", parentChildren}}}},
 		)
 	}
-	newLayer := Layer{ID:objectID, ParentLayer: parent, LayerCut: 0, ChildLayers:make([]string, 0)}
+	newLayer := Layer{ID:objectID, Name: name, ParentLayer: parent, LayerCut: 0, ChildLayers:make([]string, 0)}
 	coll.InsertOne(context.TODO(), newLayer)
 
 	c.JSON(http.StatusOK, gin.H{"Success": true})
