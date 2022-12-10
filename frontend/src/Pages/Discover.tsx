@@ -7,6 +7,7 @@ import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
 import { BiSkipPrevious, BiSkipNext } from 'react-icons/bi';
 import AudioWave from '../Components/AudioWave';
 import JavasPlan from '../javasplan.png'
+import logo from '../songstacks.png'
 
 import albumArt from "album-art";
 
@@ -120,7 +121,28 @@ function Dashboard() {
 		<div className={styles["background"]}>
 			<LeftPanel />	
 			<div className={styles["right-tab"]}>
-				<h1>Discover</h1>
+				<div className={styles["discover-nav-bar"]}>
+					<div className={styles["create-nav-bar"]}>
+						<h2>
+							Listen
+						</h2>
+					</div>
+					<div className={styles["dashboard-nav-bar"]}>
+						<h2>
+							Dashboard
+						</h2>
+					</div>
+					<div className={styles["create-nav-bar"]}>
+						<h2>
+							Create
+						</h2>
+					</div>
+
+					<div className={styles["nav-logo"]}>
+						<img src={logo} />
+					</div>
+				</div>
+				<h1> Discover </h1>
 				<div className={styles["discover"]}>
 					<div className={styles["third-section"] + " " + styles["section"]}>
 						<h1> Currently Trending </h1>
@@ -135,21 +157,19 @@ function Dashboard() {
 					<div className={styles["second-section"] + " " + styles["section"]}>
 						<h1>Hit The Road</h1>
 						<div className={styles["top-subsection"]}>
-							<ScrollingSection isUp={true} carouselImages={images_roadtrip} animationDuration="85s" width="15vw" marginBottom="1vw"/>
+							<ScrollingSection isUp={false} carouselImages={images_roadtrip} animationDuration="85s" width="15vw" marginBottom="1vw"/>
 						</div>
-						<h1>Timeless Classics</h1>
-						<div className={styles["bottom-subsection"]}>
-							<ScrollingSection isUp={false} carouselImages={images_classic} animationDuration="95s" width="15vw" marginBottom="1vw"/>
 						</div>
-					</div>
 					<div className={styles["fourth-section"] + " " + styles["section"]}>
 						<h1>SongStacks' Featured</h1>
 						<ScrollingSection isUp={true} carouselImages={images_recent} animationDuration="85s" width="15vw" marginBottom="1vw"/>
 					</div>
 					<div className={styles["fifth-section"] + " " + styles["section"]}>
-						<h1>Last Year's Favorites</h1>
-						<ScrollingSection isUp={true} carouselImages={images_recent} animationDuration="35s" width="15vw" marginBottom="1vw"/>
-					</div>
+		<h1>Timeless Classics</h1>
+						<div className={styles["bottom-subsection"]}>
+							<ScrollingSection isUp={false} carouselImages={images_classic} animationDuration="95s" width="15vw" marginBottom="1vw"/>
+						</div>
+				</div>
 				</div>
 			</div>
 		</div>
