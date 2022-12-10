@@ -44,7 +44,8 @@ const requestArtistSongs = async () => {
 }
 
 function Dashboard() {
-	const [artistSongs, setArtistSongs] = useState<Object[]>([]);
+	const [artistSongs, setArtistSongs] = useState<any[]>([]);
+	const [searchTerm, setSearchTerm] = useState('');
 	const navigate = useNavigate();
 	useEffect(() => {
 		let res : Object[] = [];
@@ -66,6 +67,8 @@ function Dashboard() {
 						<input
 						type="text"
 						placeholder="Search Layers"
+						value={searchTerm}
+						onChange={(event) => setSearchTerm(event.target.value)}
 						/>
 					</div>
 				</div>
@@ -74,10 +77,12 @@ function Dashboard() {
 						<i><FaPlus size="100px" color="white"/></i>
 						<h2 style={{color: "white"}}>Create New Layer</h2>
 					</button>
-					{artistSongs.map((layer:any, id)=>(
+					{artistSongs.filter((song) => song.layerName.toLowerCase().indexOf(searchTerm.toLowerCase())>=0)
+					.map((layer:any, id)=>(
 						<div key={id} className={styles["song-card"]} >
 							<div>
 								<img src={layer["layerImage"]} />
+								<h2>{layer["layerName"]}</h2>
 							</div>
 						</div>
 					))}
