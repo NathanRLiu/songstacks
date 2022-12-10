@@ -19,8 +19,9 @@ import (
 )
 
 type Layer struct {
-	ID		primitive.ObjectID `bson:"_id"`
 	Name		string		`form:"name"`
+	Description	string		`form:"description"`
+	Artist		string		`form:"artist"`
 	ParentLayer	string		`form:"parent"`
 	ChildLayers	[]string	`form:"children"`
 	LayerCut	float32		`form:"desired_cut"`
@@ -63,38 +64,30 @@ func getLayer(c *gin.Context) {
 	})
 	return
 }
-func createLayer(c *gin.Context) {
-	data, fileHeader, _ := c.Request.FormFile("file")
+
+func uploadFile(c *gin.Context, fileKey string, client *mongo.Client, objectID primitive.ObjectID) {
+	data, fileHeader, _ := c.Request.FormFile(fileKey)
 	buf := bytes.NewBuffer(nil)
 	if _, err := io.Copy(buf, data); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Success": false})
 	    return
 	}
-	 file := buf.Bytes()
-
-	parent := c.Request.PostForm["parentid"][0]
-	name := c.Request.PostForm["name"][0]
-	log.Printf(name)
+	file := buf.Bytes()
 	//if filepath.Ext(file.Filename)
-	client, merr := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
-	if merr != nil {
-		log.Printf("panicking");
-		panic(merr)
+	var dbName string
+	if (fileKey=="audio") {
+		dbName = "songDB"
+	} else {
+		dbName = "albumCovers"
 	}
-	defer func() {
-		if merr := client.Disconnect(context.TODO()); merr != nil {
-			log.Printf("panicking2");
-			panic(merr)
-		}
-	}()
-    bucket, err := gridfs.NewBucket(
-        client.Database("songDB"),
-    )
+	bucket, err := gridfs.NewBucket(
+		client.Database(dbName),
+	)
     if err != nil {
         log.Fatal(err)
         os.Exit(1)
     }
-    uploadStream, err := bucket.OpenUploadStream(fileHeader.Filename)
+    uploadStream, err := bucket.OpenUploadStreamWithID(objectID, fileHeader.Filename)
     if err != nil {
         fmt.Println(err)
         os.Exit(1)
@@ -108,10 +101,42 @@ func createLayer(c *gin.Context) {
     }
     log.Printf("Write file to DB was successful. File size: %d M\n", fileSize)
 
-	objectID, _ := uploadStream.FileID.(primitive.ObjectID)
-	id := objectID.Hex()
+}
+func createLayer(c *gin.Context) {
+	session, _ := sessionStore.Get(c.Request, "session-name")
+	currentUser := session.Values["username"]
+	if (currentUser==nil) {
+		c.JSON(http.StatusOK, gin.H{"Error": "Not Logged In"})
+		return
+	}
+	c.Request.ParseMultipartForm(0)
+	parent := c.Request.FormValue("parentid")
+	name := c.Request.FormValue("name")
+	description := c.Request.FormValue("description")
+	log.Printf(name)
+	client, merr := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	if merr != nil {
+		log.Printf("panicking");
+		panic(merr)
+	}
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			log.Printf("panicking2");
+			panic(err)
+		}
+	}()
 	db := client.Database("songDB")
 	coll := db.Collection("layers");
+	newLayer := Layer{
+		Name: name, 
+		Description: description, 
+		Artist: currentUser.(string), 
+		ParentLayer: parent, 
+		LayerCut: 0, 
+		ChildLayers: make([]string, 0)}
+	insertResult, _ := coll.InsertOne(context.TODO(), newLayer)
+	objectID:= insertResult.InsertedID.(primitive.ObjectID)
+
 	if (parent!="") {
 		var parentLayer Layer
 		parentID, _ := primitive.ObjectIDFromHex(parent)
@@ -122,16 +147,16 @@ func createLayer(c *gin.Context) {
 			return
 		}
 		parentChildren := parentLayer.ChildLayers
-		parentChildren = append(parentChildren, id)
+		parentChildren = append(parentChildren, objectID.Hex())
 		coll.UpdateOne(
 			context.TODO(),
 			bson.D{{"_id", parentID}},
 			bson.D{{"$set", bson.D{{"childlayers", parentChildren}}}},
 		)
 	}
-	newLayer := Layer{ID:objectID, Name: name, ParentLayer: parent, LayerCut: 0, ChildLayers:make([]string, 0)}
-	coll.InsertOne(context.TODO(), newLayer)
-
+	
+	uploadFile(c, "audio", client, objectID)
+	uploadFile(c, "cover", client, objectID)
 	c.JSON(http.StatusOK, gin.H{"Success": true})
 	return
 }
@@ -170,7 +195,41 @@ func playSong(c *gin.Context) {
 		c.Data(http.StatusOK, "audio/mpeg", fileBytes)
 	}
 	
-	
+}
+
+func getCover(c *gin.Context) {
+	coverID, _ := primitive.ObjectIDFromHex(c.Query("coverid"))
+	client, merr := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	if merr != nil {
+		log.Printf("panicking");
+		panic(merr)
+	}
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			log.Printf("panicking2");
+			panic(err)
+		}
+	}()
+	db := client.Database("albumCovers")
+	bucket, bucketErr := gridfs.NewBucket(db)
+	if bucketErr != nil {
+		log.Printf(bucketErr.Error())
+	}
+	downloadStream, downloadErr := bucket.OpenDownloadStream(coverID)
+	if downloadErr != nil {
+		log.Printf("panicking")
+		log.Printf(downloadErr.Error())
+		
+	}
+	for true {
+		fileBytes := make([]byte, 1024)
+		if _, err := downloadStream.Read(fileBytes); err != nil {
+			log.Printf(err.Error())
+			return
+		}
+
+		c.Data(http.StatusOK, "image/png", fileBytes)
+	}
 }
 
 func getChildren(c *gin.Context) {
