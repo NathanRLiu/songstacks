@@ -40,7 +40,13 @@ function LeftPanel(){
 				<h3> Samih R Liu</h3>
 
 				<div className={styles["progress-bar"]}>
-					<div style={{width:timeSec*100/trackLength + "%", height:"100%",left:0, backgroundColor:"white"}} />
+					<div style={{
+						width:timeSec*100/trackLength + "%",
+						height:"100%",
+						left:0, 
+						backgroundColor:"white",
+						transition:"1s width linear",
+					}} />
 				</div>
 				<p>{timeFormat(timeSec)}/{timeFormat(trackLength)}</p>
 				<div className={styles["audio-control"]} >
@@ -152,120 +158,120 @@ function Dashboard() {
 const recentlyListened = [
 	{
 		"artist":"Kanye West",
-		"info":{album:"Graduation", size: "large"}
+		"info":{album:"Graduation", size: "medium"}
 	},
 	{
 		"artist":"Joji",
-		"info":{album:"Smithereens", size: "large"}
+		"info":{album:"Smithereens", size: "medium"}
 	},
 	{
 		"artist":"Drake",
-		"info":{album:"Honestly, Nevermind", size: "large"}
+		"info":{album:"Honestly, Nevermind", size: "medium"}
 	},
 	{
 		"artist":"J. Cole",
-		"info":{album:"Born Sinner", size: "large"}
+		"info":{album:"Born Sinner", size: "medium"}
 	},
 	{
 		"artist":"Pink Floyd",
-		"info":{album:"The Dark Side of the Moon", size: "large"}
+		"info":{album:"The Dark Side of the Moon", size: "medium"}
 	},
 	{
 		"artist":"Clairo",
-		"info":{album:"Hot Cheeto Puffs", size: "large"}
+		"info":{album:"Hot Cheeto Puffs", size: "medium"}
 	},
 	{
 		"artist":"Kanye West",
-		"info":{album:"Ye", size: "large"}
+		"info":{album:"Ye", size: "medium"}
 	},
 	{
 		"artist":"Joji",
-		"info":{album:"Ballads", size: "large"}
+		"info":{album:"Ballads", size: "medium"}
 	},
 
 	{
 		"artist":"Playboi Carti",
-		"info":{album:"Whole Lotta Red", size: "large"}
+		"info":{album:"Whole Lotta Red", size: "medium"}
 	},
 	{
 		"artist":"Illenium",
-		"info":{album:"Gold (Stupid Love)", size: "large"}
+		"info":{album:"Gold (Stupid Love)", size: "medium"}
 	},
 ]
 const popular = [
 	{
 		"artist":"Taylor Swift",
-		"info":{album:"Midnights", size: "large"}
+		"info":{album:"Midnights", size: "medium"}
 	},
 	{
 		"artist":"Harry Styles",
-		"info":{album:"As It Was", size: "large"}
+		"info":{album:"As It Was", size: "medium"}
 	},
 	{
 		"artist":"Metro Boomin",
-		"info":{album:"HEROES & VILLAINS", size: "large"}
+		"info":{album:"HEROES & VILLAINS", size: "medium"}
 	},
 	{
 		"artist":"Lil Nas X",
-		"info":{album:"Star Walkin'", size: "large"}
+		"info":{album:"Star Walkin'", size: "medium"}
 	},
 	{
 		"artist":"The Kid LAROI",
-		"info":{album:"STAY (with Justin Bieber)", size: "large"}
+		"info":{album:"STAY (with Justin Bieber)", size: "medium"}
 	},
 	{
 		"artist":"BLACKPINK",
-		"info":{album:"Born Pink", size: "large"}
+		"info":{album:"Born Pink", size: "medium"}
 	},
 	{
 		"artist":"The Weeknd",
-		"info":{album:"Starboy", size: "large"}
+		"info":{album:"Starboy", size: "medium"}
 	},
 	{
 		"artist":"Mariah Carey",
-		"info":{album:"Merry Christmas", size: "large"}
+		"info":{album:"Merry Christmas", size: "medium"}
 	},
 
 	{
 		"artist":"JVKE",
-		"info":{album:"Golden Hour", size: "large"}
+		"info":{album:"Golden Hour", size: "medium"}
 	},
 
 ]
 const roadtrip = [
 	{
 		"artist":"Kid Cudi",
-		"info":{album:"Man On The Moon II", size: "large"}
+		"info":{album:"Man On The Moon II", size: "medium"}
 	},
 	{
 		"artist":"Miley Cyrus",
-		"info":{album:"The Time of Our Lives", size: "large"}
+		"info":{album:"The Time of Our Lives", size: "medium"}
 	},
 	{
 		"artist":"Fuzzybrain",
-		"info":{album:"Dayglow", size: "large"}
+		"info":{album:"Dayglow", size: "medium"}
 	},
 ]
 const classics = [
 	{
 		"artist":"The Beatles",
-		"info":{album:"Love", size: "large"}
+		"info":{album:"Love", size: "medium"}
 	},
 	{
 		"artist":"Michael Jackson",
-		"info":{album:"Dangerous", size: "large"}
+		"info":{album:"Dangerous", size: "medium"}
 	},
 	{
 		"artist":"Billy Joel",
-		"info":{album:"Piano Man", size: "large"}
+		"info":{album:"Piano Man", size: "medium"}
 	},
 	{
 		"artist":"Queen",
-		"info":{album:"Bohemian Rhapsody", size: "large"}
+		"info":{album:"Bohemian Rhapsody", size: "medium"}
 	},
 	{
 		"artist":"Eagles",
-		"info":{album:"Hotel California", size: "large"}
+		"info":{album:"Hotel California", size: "medium"}
 	},
 ]
 export default Dashboard;

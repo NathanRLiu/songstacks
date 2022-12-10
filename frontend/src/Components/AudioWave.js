@@ -21,9 +21,15 @@ function AudioWave(props:{
 	}) {
 	
 	function togglePlay() {
-		waves.map((layer) => {
-			layer.playPause();
-		})
+		if (props.isPlaying){
+			waves.map((layer) => {
+				layer.play();
+			})
+		}else{
+			waves.map((layer) => {
+				layer.pause();
+			})
+		}
 	}
 	React.useEffect(togglePlay,[props.isPlaying]) 
 	function changeVolume(layerIndex: number, volume: number) {
@@ -45,14 +51,16 @@ function AudioWave(props:{
 	const canvas = React.useRef();
 
 	React.useEffect(() => {
-		function updateTime(){
+		async function updateTime(){
 			if (waves.length > 0){
-				let currTime = Math.floor(waves[0].getCurrentTime());
-				console.log(currTime);
+				let currTime = Math.floor(await waves[0].getCurrentTime());
 				props.setTime(currTime)
 			}
 		}
 		setInterval(updateTime, 1000);
+	}, [waves])
+	React.useEffect(() => {
+
 		const getLayers = async () => {
 			const ctx = canvas.current.getContext("2d");
 			const gradient = ctx.createLinearGradient(20, 0, props.width, 200);
@@ -74,8 +82,6 @@ function AudioWave(props:{
 					count++;
 					maxLen = Math.max(maxLen, layerAudio.duration) 
 					setLongestDuration(maxLen)
-					console.log(count);
-					console.log(response.data.Layers.length);
 					if (count == response.data.Layers.length){
 						props.setTotalTime(maxLen)
 					}
@@ -102,7 +108,7 @@ function AudioWave(props:{
 				waveColor: gradient,
 				cursorColor: 'transparent',
 				partialRender:true,
-				barRadius:2,
+				barRadius:1,
 			});
 			waveform.load(layer.audio)
 			waveform.toggleInteraction();
