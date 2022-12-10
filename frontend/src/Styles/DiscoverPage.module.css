@@ -13,6 +13,7 @@
 }
 .side-dashboard{
 	height:100%;
+	width: 18%;
 	background-color:#100c10;
 
 		  box-shadow: 0 0px 8px rgba(0,0,0,0.6), 
@@ -118,10 +119,11 @@
 .right-tab > h1 {
 	font-size:64px;
 	color:white;
-	margin-left:40px;
+	margin-left:30px;
 	margin-top:30px;
 }
 .right-tab {
+	width: 82%;
 	background: linear-gradient(40deg, #110512 -4%, #64314d, #110512 95%);
 	border-top-left-radius:1vw;
 	border-bottom-left-radius:1vw;
@@ -167,4 +169,53 @@ input[type=range] {
 	width:50px;
 	margin-left:20px;
 	position:relative;
+}
+
+.searchBar {
+	background-color: white;
+	margin-left: 30px;
+	width: 250px;
+	border-radius: 4px;
+	padding: 4px;
+}
+
+.searchBar > input {
+	border: none;
+	width: 225px;
+}
+
+.searchError {
+	color: white;
+}
+
+.song-card {
+	background-color:#202020cc;
+	width:250px;
+	height:350px;
+	border-radius:9px;
+	border: none;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	flex-direction: column;
+}
+
+.song-card > div {
+	width:90%;
+	height:93%;
+	border:#64316d 3px solid;
+	border-radius:9px;
+}
+.song-card > div > img {
+	width:80%;
+	margin:auto;
+	display:block;
+	margin-top:10%;
+}
+.song-card > div > h2 {
+	margin: auto;
+	text-align: center;
+	margin: 5px;
 }
