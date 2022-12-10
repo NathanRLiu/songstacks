@@ -13,6 +13,22 @@ import albumArt from "album-art";
 
 function LeftPanel(){
 	const [isPlaying, setPlaying] = useState(false);
+	const [trackLength, setTrackLength] = useState(1);
+	const [timeSec, setTimeSec] = useState(0);
+	const timeFormat = (timeSeconds:number) => {
+
+		const time = Math.ceil(timeSeconds);
+		var minutes = Math.floor(time / 60);
+		var seconds = time % 60;
+		console.log(seconds);
+
+		function str_pad_left(string:number,pad:any,length:number) {
+				return (new Array(length+1).join(pad)+string).slice(-length);
+		}
+
+		var finalTime = minutes+':'+str_pad_left(seconds,'0',2);
+		return finalTime;
+	}
 	return(
 		<div className={styles["side-dashboard"]}>
 			<div className={styles["now-playing"]}>
@@ -24,24 +40,30 @@ function LeftPanel(){
 				<h3> Samih R Liu</h3>
 
 				<div className={styles["progress-bar"]}>
-					<div style={{width:"70%", height:"100%",left:0, backgroundColor:"white"}} />
+					<div style={{width:timeSec*100/trackLength + "%", height:"100%",left:0, backgroundColor:"white"}} />
 				</div>
+				<p>{timeFormat(timeSec)}/{timeFormat(trackLength)}</p>
 				<div className={styles["audio-control"]} >
 					<div className={styles["prev-track"]}> <BiSkipPrevious /> </div>
 					<div 
 						className={styles.play}
 						onClick={()=>{setPlaying(!isPlaying)}}
-					> 
+					>
 						{!isPlaying && <FaPlayCircle />}
 						{isPlaying && <FaPauseCircle />}
 					</div>
 					<div className={styles["next-track"]}> <BiSkipNext /> </div>
 				</div>
 				<div className={styles["audio-waves"]}>
-					<AudioWave layerID="639195396a87541d9f68c848" width={250} isPlaying={isPlaying}/>
+					<AudioWave
+						layerID="639195396a87541d9f68c848"
+						width={250}
+						isPlaying={isPlaying} 
+						setTotalTime={setTrackLength}
+						setTime={setTimeSec}
+					/>
 				</div>
 			</div>
-			
 		</div>
 	)
 }

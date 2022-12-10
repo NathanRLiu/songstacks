@@ -12,13 +12,18 @@ interface Layer {
 	ChildLayers: Array<string>,
 	LayerCut: Number
 }
-function AudioWave(props:{layerID: string, width:Number, isPlaying:Boolean}) {
-
+function AudioWave(props:{
+		layerID: string,
+		width:Number,
+		isPlaying:Boolean,
+		setTime:Function, 
+		setTotalTime:Function,
+	}) {
+	
 	function togglePlay() {
 		waves.map((layer) => {
 			layer.playPause();
 		})
-			
 	}
 	React.useEffect(togglePlay,[props.isPlaying]) 
 	function changeVolume(layerIndex: number, volume: number) {
@@ -27,6 +32,8 @@ function AudioWave(props:{layerID: string, width:Number, isPlaying:Boolean}) {
 		waves[layerIndex].setVolume(volume/100);
 		setVolumes(newVolumes);
 	}
+
+
 
 	const [layers, setLayers] = useState([]);
 	const [waves, setWaves] = useState([]);
@@ -38,6 +45,14 @@ function AudioWave(props:{layerID: string, width:Number, isPlaying:Boolean}) {
 	const canvas = React.useRef();
 
 	React.useEffect(() => {
+		function updateTime(){
+			if (waves.length > 0){
+				let currTime = Math.floor(waves[0].getCurrentTime());
+				console.log(currTime);
+				props.setTime(currTime)
+			}
+		}
+		setInterval(updateTime, 1000);
 		const getLayers = async () => {
 			const ctx = canvas.current.getContext("2d");
 			const gradient = ctx.createLinearGradient(20, 0, props.width, 200);
@@ -50,13 +65,20 @@ function AudioWave(props:{layerID: string, width:Number, isPlaying:Boolean}) {
 			console.log(response.data);
 			let layerAudios = [];
 			let maxLen = 1;
+			let count = 0;
 			for (const layer of response.data.Layers) {
 				let layerAudio = new Audio(`/api/layer/playSong/?songid=${layer.ID}`)
 				let myLayer = {"layerID":layer.ID, "audio":layerAudio}
 				layerAudios.push(myLayer)
 				layerAudio.onloadedmetadata = () => {
+					count++;
 					maxLen = Math.max(maxLen, layerAudio.duration) 
 					setLongestDuration(maxLen)
+					console.log(count);
+					console.log(response.data.Layers.length);
+					if (count == response.data.Layers.length){
+						props.setTotalTime(maxLen)
+					}
 				}
 			}
 			setLayers(layerAudios);
@@ -122,4 +144,8 @@ function AudioWave(props:{layerID: string, width:Number, isPlaying:Boolean}) {
 	
 }
 
+AudioWave.defaultProps={
+		setTotalTime:(han)=>{return han},
+		setTime:(han)=>{return han}
+}
 export default AudioWave;

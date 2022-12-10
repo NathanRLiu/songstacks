@@ -24,6 +24,7 @@
 }
 .now-playing{
 	margin-top:50px;
+	color:white;
 }
 .now-playing > h1 {
 	font-size:32px;
