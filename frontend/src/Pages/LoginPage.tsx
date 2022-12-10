@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import {useNavigate} from 'react-router-dom'
+import React, { useState} from 'react';
+import {useNavigate, useSearchParams} from 'react-router-dom'
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import image from '../logingraphic.png';
@@ -12,7 +12,9 @@ import styles from '../Styles/LoginPage.module.css'
 
 function LoginPage() {
 	const navigate = useNavigate();
-	const [isSignup, setIsSignup] = useState(true)
+	const [searchParams] = useSearchParams();
+	const redirectUrl = searchParams.get("redirecturl");
+	const [isSignup, setIsSignup] = useState(true);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	async function onSubmit() {
@@ -29,7 +31,7 @@ function LoginPage() {
 		}
 		else {
 			//redirect to dashboard
-			navigate('/discover');
+			navigate(`/${redirectUrl}`);
 		}
 	}
 	React.useEffect(() => {

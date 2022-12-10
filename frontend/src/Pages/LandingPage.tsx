@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, useNavigate, createSearchParams} from 'react-router-dom';
 import { GiMicrophone } from 'react-icons/gi';
 import { HiUserGroup } from 'react-icons/hi2';
 import { ImHeadphones } from 'react-icons/im';
@@ -53,10 +53,10 @@ function LandingPage() {
 					<h2> Ready to get started? </h2>
 					<div className={ styles.buttons }>
 						<button onClick={
-							() => navigate("/login")
+							() => navigate("/login/?redirecturl=dashboard")
 						}> Start Creating </button>
 						<button onClick={
-							() => navigate("/login")}
+							() => navigate("/login/?redirecturl=discover")}
 						> Start Listening </button>
 					</div>
 				</div>

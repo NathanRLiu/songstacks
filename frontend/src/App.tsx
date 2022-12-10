@@ -23,7 +23,9 @@ function App() {
 				<Routes>
 					<Route path="/">
 						<Route index element={<LandingPage />} />
-						<Route path="login" element={<LoginPage />} />
+						<Route path="login" element={<LoginPage />} >
+							<Route path=":redirectUrl" element={<LoginPage />} />
+						</Route>
 						<Route path="song" element={<SongPage />} />
 						<Route path="discover" element={<Discover />} />
 						<Route path="playSong" element={<AudioPlayer layerID="639195396a87541d9f68c848"/>} />
