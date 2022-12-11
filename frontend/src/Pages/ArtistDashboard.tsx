@@ -6,53 +6,21 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import NavBar from "../Components/NavBar";
 import logo from "../songstacks.png";
-
-const requestArtistSongs = async () => {
-	let res = [
-		{
-			"layerid":"fewofjfioejTHISISTHEIDjewoifjaioefj",
-			"layerName":"My Layer",
-			"layerImage":"https://i.scdn.co/image/ab67616d0000b2731dacfbc31cc873d132958af9",
-		},
-		{
-			"layerid":"fewofjfioejTHISISTHEIDjewoifjaioefj",
-			"layerName":"My Layer",
-			"layerImage":"https://i.scdn.co/image/ab67616d0000b2731dacfbc31cc873d132958af9",
-		},
-		{
-			"layerid":"fewofjfioejTHISISTHEIDjewoifjaioefj",
-			"layerName":"My Layer",
-			"layerImage":"https://i.scdn.co/image/ab67616d0000b2731dacfbc31cc873d132958af9",
-		},
-		{
-			"layerid":"fewofjfioejTHISISTHEIDjewoifjaioefj",
-			"layerName":"My Layer",
-			"layerImage":"https://i.scdn.co/image/ab67616d0000b2731dacfbc31cc873d132958af9",
-		},
-		{
-			"layerid":"fewofjfioejTHISISTHEIDjewoifjaioefj",
-			"layerName":"My Layer",
-			"layerImage":"https://i.scdn.co/image/ab67616d0000b2731dacfbc31cc873d132958af9",
-		},
-		{
-			"layerid":"fewofjfioejTHISISTHEIDjewoifjaioefj",
-			"layerName":"My Layer",
-			"layerImage":"https://i.scdn.co/image/ab67616d0000b2731dacfbc31cc873d132958af9",
-		}
-	]
-	return res
-}
+import axios from "axios";
 
 function Dashboard() {
 	const [artistSongs, setArtistSongs] = useState<any[]>([]);
 	const [searchTerm, setSearchTerm] = useState('');
 	const navigate = useNavigate();
 	useEffect(() => {
-		let res : Object[] = [];
 		let fetchData = async () => {
-			res = await requestArtistSongs();
+			const response = await axios.get(`/api/layer/getArtistLayers`, { withCredentials: true });
+			if ("Error" in response.data) {
+				return;
+			}
+			setArtistSongs(response.data.results);
 		}
-		fetchData().then( ()=> setArtistSongs(res) );
+		fetchData();
 	},[])
 	return (
 		<div className={styles["background"]}>
@@ -77,12 +45,12 @@ function Dashboard() {
 						<i><FaPlus size="100px" color="white"/></i>
 						<h2 style={{color: "white"}}>Create New Layer</h2>
 					</button>
-					{artistSongs.filter((song) => song.layerName.toLowerCase().indexOf(searchTerm.toLowerCase())>=0)
+					{artistSongs.filter((song) => song.Name.toLowerCase().indexOf(searchTerm.toLowerCase())>=0)
 					.map((layer:any, id)=>(
 						<div key={id} className={styles["song-card"]} >
 							<div>
-								<img src={layer["layerImage"]} />
-								<h2>{layer["layerName"]}</h2>
+								<img src={`api/layer/getCover/?coverid=${layer["ID"]}`} />
+								<h2>{layer["Name"]}</h2>
 							</div>
 						</div>
 					))}
