@@ -181,7 +181,7 @@ func createLayer(c *gin.Context) {
 	
 	uploadFile(c, "audio", client, objectID)
 	uploadFile(c, "cover", client, objectID)
-	c.JSON(http.StatusOK, gin.H{"Success": true})
+	c.JSON(http.StatusOK, gin.H{"Success": true, "layerID": objectID.Hex()})
 	return
 }
 

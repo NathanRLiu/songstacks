@@ -44,6 +44,9 @@ function SongPage() {
 	const [ description, setDescription ] = useState("");
 	const [ audioFile, setAudioFile ] = useState<null | Blob | string>();
 	const [ songImage, setSongImage ] = useState(logo);
+	const [activeLayer, setActiveLayer] = useState(0);
+	const [layerStack, setLayerStack] = useState<any[]>([]);
+	const [audioKey, setAudioKey] = useState(Date.now());
 	useEffect(() => {
 		const delayDebounceFn = setTimeout(() => {
 		  console.log(searchTerm)
@@ -135,6 +138,7 @@ function SongPage() {
 				<div style={{"margin":20}}>
 					<input
 						type="file"
+						key={audioKey}
 						onChange={
 							(event) => {
 								if (!event.target.files) return;
@@ -145,7 +149,6 @@ function SongPage() {
 				</div>
 				<button
 					className={styles["publish-button"]}
-					disabled = {published}
 					onClick={async ()=> {
 						if (audioFile==null) return;
 						const formData = new FormData();
@@ -158,45 +161,62 @@ function SongPage() {
 						formData.append("audio", new File([audioFile], "fileName"));
 						formData.append("cover", cover);
 						publish(true);
-						axios.post('/api/layer/create',formData,
+						const result = await axios.post('/api/layer/create',formData,
 						{
 							headers: {
 								'content-type': 'multipart/form-data'
 							}
 						});
+						console.log(result);
+						let newLayers = [...layerStack];
+						newLayers.push({"Name": title, "Description": description, "layerID": result.data.layerID});
+						setActiveLayer(newLayers.length-1);
+						setLayerStack(newLayers);
+						setTitle("");
+						setDescription("");
+						setGenre("");
+						setAudioKey(Date.now());
+						setSongImage(logo);
+						if (imageInput.current!=null) {
+							imageInput.current.value = "";
+						}
 					}}
 				>
-					{published?"Published!":"Publish"}
+					{"Publish"}
 				</button>
 			</div> 
 			<div className={ styles["editor-section"] } >
-				
-				<div className={styles["audio-waves"]}>
+				{layerStack.length>0 ? 
+				<div>
+					<div className={styles["audio-waves"]}>
 					<AudioWave
-						layerID="63952cdcba8f09e5ba64c58a"
+						layerID={"639636af27a70e2cffd1c045"}
 						width={800}
 						height={200}
 						isPlaying={isPlaying} 
 						setTotalTime={setTrackLength}
 						setTime={setTimeSec}
-						volumeStyle={{color:"white", textAlign: "center"}}
+						volumeStyle={{color:"white", textAlign: "center", margin: 0}}
 					/>
-				</div>
-				<div className={styles["audio-control"]} >
-					<div className={styles["prev-track"]}> <BiSkipPrevious /> </div>
-					<div 
-						className={styles.play}
-						onClick={()=>{setIsPlaying(!isPlaying)}}
-					>
-						{!isPlaying && <FaPlayCircle />}
-						{isPlaying && <FaPauseCircle />}
 					</div>
-					<div className={styles["next-track"]}> <BiSkipNext /> </div>
-				</div>
+					<div className={styles["audio-control"]} >
+						<div className={styles["prev-track"]}> <BiSkipPrevious /> </div>
+						<div 
+							className={styles.play}
+							onClick={()=>{setIsPlaying(!isPlaying)}}
+						>
+							{!isPlaying && <FaPlayCircle />}
+							{isPlaying && <FaPauseCircle />}
+						</div>
+						<div className={styles["next-track"]}> <BiSkipNext /> </div>
+					</div>
+				</div>: 
+				<h1 style={{marginTop: "280px", textAlign:"center"}}>No Layers Added. . . </h1>}
+				
 			</div>
 			<div className={ styles["stack-view-container"] }>
 				<div className={ styles["stack-view"] } >
-					<StackView />
+					<StackView layerStack={layerStack} activeLayer={activeLayer} setActiveLayer={setActiveLayer}/>
 				</div>
 			</div>
 			<div className={ styles["layer-finder-container"] } >
