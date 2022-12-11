@@ -4,13 +4,13 @@
 	display:flex;
 	flex-direction:row;
 	color:white;
-	position:relative;
+	position:absolute;
 	vertical-align:center;
 	align-items:center;
 	gap:20px;
 	font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
-	float:right;
-	padding-right:60px;
+	right:0;
+	padding-right:40px;
 }
 .discover-nav-bar > button { 
 	all: unset;

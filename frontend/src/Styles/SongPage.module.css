@@ -37,6 +37,13 @@
 
 	border-radius:5px;
 }
+.image-upload > input {
+	display:none;
+	visibility:hidden;
+}
+.search-bar > input:focus-visible {
+	outline:none;
+}
 .detail-editor > h1{
 	margin-left:30px;
 	margin-top:20px;
