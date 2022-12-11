@@ -265,8 +265,8 @@ func searchLayer(c *gin.Context) {
 		}
 	}()
 	coll := client.Database("songDB").Collection("layers")
-	filter := bson.D{{"name", primitive.Regex{Pattern: name, Options: ""}}}
-	var resultsArray []Layer
+	filter := bson.D{{"name", primitive.Regex{Pattern: name, Options: "i"}}}
+	var resultsArray []bson.M
 	searchResult, err := coll.Find(context.TODO(), filter)
 	if err != nil {
 		log.Printf(err.Error())
