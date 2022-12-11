@@ -132,9 +132,9 @@
 	border-bottom-left-radius:1vw;
 }
 .audio-waves {
-	overflow:scroll;
-	padding-left:25px;
-	padding-right:25px;
+	overflow-y:scroll;
+	padding-left:10px;
+	padding-right:10px;
 	height:250px;
 }
 input[type=range] {
