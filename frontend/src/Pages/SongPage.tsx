@@ -8,6 +8,9 @@ import { AiOutlineSearch } from 'react-icons/ai'
 import StackView from '../Components/StackView';
 import NavBar from '../Components/NavBar';
 import styles from '../Styles/SongPage.module.css'
+import AudioWave from '../Components/AudioWave';
+import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
+import { BiSkipPrevious, BiSkipNext } from 'react-icons/bi';
 
 type SongCardProps = {
 	"Title":string;
@@ -35,8 +38,9 @@ function SongPage() {
 	const [ genre, setGenre ] = useState("");
 	const [searchResults, setSearchResults] = useState<any[]>([]);
 	const [searchTerm, setSearchTerm] = useState("");
-	const [parentLayer, setParentLayer] = useState("");
-
+	const [isPlaying, setIsPlaying] = useState(false);
+	const [trackLength, setTrackLength] = useState(1);
+	const [timeSec, setTimeSec] = useState(0);
 	const [ description, setDescription ] = useState("");
 	const [ audioFile, setAudioFile ] = useState<null | Blob | string>();
 	const [ songImage, setSongImage ] = useState(logo);
@@ -128,7 +132,7 @@ function SongPage() {
 						</div>
 					</div>
 				</div>
-				<div style={{"margin":30}}>
+				<div style={{"margin":20}}>
 					<input
 						type="file"
 						onChange={
@@ -164,8 +168,31 @@ function SongPage() {
 				>
 					{published?"Published!":"Publish"}
 				</button>
-			</div>
+			</div> 
 			<div className={ styles["editor-section"] } >
+				
+				<div className={styles["audio-waves"]}>
+					<AudioWave
+						layerID="63952cdcba8f09e5ba64c58a"
+						width={800}
+						height={200}
+						isPlaying={isPlaying} 
+						setTotalTime={setTrackLength}
+						setTime={setTimeSec}
+						volumeStyle={{color:"white", textAlign: "center"}}
+					/>
+				</div>
+				<div className={styles["audio-control"]} >
+					<div className={styles["prev-track"]}> <BiSkipPrevious /> </div>
+					<div 
+						className={styles.play}
+						onClick={()=>{setIsPlaying(!isPlaying)}}
+					>
+						{!isPlaying && <FaPlayCircle />}
+						{isPlaying && <FaPauseCircle />}
+					</div>
+					<div className={styles["next-track"]}> <BiSkipNext /> </div>
+				</div>
 			</div>
 			<div className={ styles["stack-view-container"] }>
 				<div className={ styles["stack-view"] } >

@@ -30,7 +30,7 @@ function App() {
 						<Route path="discover" element={<Discover />} />
 						<Route path="playSong" element={<AudioPlayer layerID="639195396a87541d9f68c848"/>} />
 						<Route path="dashboard" element={<ArtistDashboard />} />
-						<Route path="wave"  element={<AudioWave layerID="639195396a87541d9f68c848" width={920} isPlaying={false} setTime={()=>{}} setTotalTime={()=>{}}/>}  />
+						<Route path="wave"  element={<AudioWave layerID="639195396a87541d9f68c848" width={920} height={200} isPlaying={false} setTime={()=>{}} setTotalTime={()=>{}} volumeStyle={{}}/>}  />
 					</Route>
 				</Routes>
 			</BrowserRouter>

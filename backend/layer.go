@@ -26,6 +26,15 @@ type Layer struct {
 	ChildLayers	[]string	`form:"children"`
 	LayerCut	float32		`form:"desired_cut"`
 }
+type LayerWithID struct {
+	ID			string		`bson:"_id"`
+	Name		string		`form:"name"`
+	Description	string		`form:"description"`
+	Artist		string		`form:"artist"`
+	ParentLayer	string		`form:"parent"`
+	ChildLayers	[]string	`form:"children"`
+	LayerCut	float32		`form:"desired_cut"`
+}
 type getLayerReq struct {
 	layerID	string	`json:"layerid"`
 }
@@ -43,8 +52,8 @@ func getLayer(c *gin.Context) {
 	}()
 	coll := client.Database("songDB").Collection("layers")
 
-	var curr Layer
-	var layers []Layer
+	var curr LayerWithID
+	var layers []LayerWithID
 	err = coll.FindOne(context.TODO(), bson.M{"_id": layerID}).Decode(&curr)
 	if err != nil {
 		log.Printf(err.Error());

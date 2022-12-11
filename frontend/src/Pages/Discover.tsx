@@ -68,11 +68,13 @@ function LeftPanel(){
 				</div>
 				<div className={styles["audio-waves"]}>
 					<AudioWave
-						layerID="639195396a87541d9f68c848"
+						layerID="63952cdcba8f09e5ba64c58a"
 						width={250}
+						height={80}
 						isPlaying={isPlaying} 
 						setTotalTime={setTrackLength}
 						setTime={setTimeSec}
+						volumeStyle={{color:"white", "float":"left", marginLeft:20, margin: "auto", marginTop: "5px"}}
 					/>
 				</div>
 			</div>
@@ -176,9 +178,6 @@ function SearchDisplay(props: {searchTerm: string, setDisplaySearch: Function}) 
 		}, 2000)
 	
 		return () => clearTimeout(delayDebounceFn)
-	  }, [props.searchTerm])
-	useEffect(() => {
-		
 	}, [props.searchTerm])
 	return (
 		<div style={{display: "flex", flexDirection: "row", margin: "25px"}}>

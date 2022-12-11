@@ -18,6 +18,8 @@ function AudioWave(props:{
 		isPlaying:Boolean,
 		setTime:Function, 
 		setTotalTime:Function,
+		height: Number,
+		volumeStyle: Object
 	}) {
 	
 	function togglePlay() {
@@ -62,6 +64,7 @@ function AudioWave(props:{
 	React.useEffect(() => {
 
 		const getLayers = async () => {
+			console.log("width = " + props.width);
 			const ctx = canvas.current.getContext("2d");
 			const gradient = ctx.createLinearGradient(20, 0, props.width, 200);
 			gradient.addColorStop(0, '#ee0979');   
@@ -103,7 +106,7 @@ function AudioWave(props:{
 				cursorWidth: 1,
 				container: '#waveform-'+layer.layerID,
 				backend: 'WebAudio',
-				height: 80,
+				height: props.height,
 				progressColor: '#B0B0B0',
 				waveColor: gradient,
 				cursorColor: 'transparent',
@@ -126,7 +129,7 @@ function AudioWave(props:{
 
 				return (
 					<div key={index} style={{"marginBottom":10, }}>
-						<p style={{color:"white", "float":"left", marginLeft:20}}>Layer {index + 1}</p>
+						<p style={props.volumeStyle}>Layer {index + 1}</p>
 						<input 
 							type="range"
 							min="0"
