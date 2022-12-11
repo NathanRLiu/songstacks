@@ -127,13 +127,15 @@ function SongPage() {
 					className={styles["publish-button"]}
 					disabled = {published}
 					onClick={async ()=> {
+						if (audioFile==null) return;
 						const formData = new FormData();
-						
+						formData.append('parentid', '');
 						formData.append('description', description);
 						formData.append('name', title);
 						let cover = await fetch(songImage)
 							.then(r => r.blob())
-							.then(blobFile => new File([blobFile], "fileNameGoesHere", { type: "image/png" }))
+							.then(blobFile => new File([blobFile], "fileNameGoesHere", { type: "image/png" }));
+						formData.append("audio", new File([audioFile], "fileName"));
 						formData.append("cover", cover);
 						publish(true);
 						axios.post('/api/layer/create',formData,

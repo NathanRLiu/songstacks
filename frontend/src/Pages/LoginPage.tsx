@@ -14,19 +14,20 @@ function LoginPage() {
 	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
 	const redirectUrl = searchParams.get("redirecturl");
-	const [isSignup, setIsSignup] = useState(true);
+	const [isLogin, setIsLogin] = useState(true);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	async function onSubmit() {
+	async function onSubmit(event: Event) {
+		event.preventDefault();
 		let response;
-		if (isSignup) {
-			response = await axios.post(`/api/signup`, {"username": email, "password": password}, { withCredentials: true });
-		}
-		else {
+		if (isLogin) {
 			response = await axios.post(`/api/login`, {"username": email, "password": password}, { withCredentials: true });
 		}
+		else {
+			response = await axios.post(`/api/signup`, {"username": email, "password": password}, { withCredentials: true });
+		}
 		console.log(response);
-		if ("Error" in response) {
+		if ("Error" in response.data) {
 			//show an error message somewhere
 		}
 		else {
@@ -47,25 +48,25 @@ function LoginPage() {
 		<div className={styles.dallecredit}>Images generated with OpenAI Dall-E. <br /> Sound wave <a href="https://www.freepik.com/free-vector/poster-sound-wave_17301774.htm#query=sound%20wave&position=8&from_view=keyword">Image by rorozoa</a> on Freepik.</div>
 		<div className={ styles.background } >
 			<div className={styles["form-full"]}>
-				<div className={styles["form-scope"] +" "+ (isSignup?"":styles["animate-scope"])}>
-					<div className={ styles["form-half"] +" "+ (isSignup?"":styles["animate-form"])}>
+				<div className={styles["form-scope"] +" "+ (isLogin?"":styles["animate-scope"])}>
+					<div className={ styles["form-half"] +" "+ (isLogin?"":styles["animate-form"])}>
 						<div className={ styles["form-container"]}>
 							<LoginForm email={email} setEmail={setEmail} password={password} setPassword={setPassword} onSubmit={onSubmit}/>
 							<div className={styles["switch-form-prompt"]}>
 							Don't have an account? 
 								<div className={styles["switch-link-container"]}>
-								<Button onClick={()=>{setIsSignup(false)}} variant="link">Sign up.</Button>
+								<Button onClick={()=>{setIsLogin(false)}} variant="link">Sign up.</Button>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div className={ styles["form-half-1"]  +" "+ (isSignup?"":styles["animate-form-1"])}>
+					<div className={ styles["form-half-1"]  +" "+ (isLogin?"":styles["animate-form-1"])}>
 						<div className={ styles["form-container"]}>
 							<SignupForm email={email} setEmail={setEmail} password={password} setPassword={setPassword} onSubmit={onSubmit}/>
 							<div className={styles["switch-form-prompt"]}>
 							Already have an account?
 								<div className={styles["switch-link-container"]}>
-								<Button onClick={()=>{setIsSignup(true)}} variant="link">Log in.</Button>
+								<Button onClick={()=>{setIsLogin(true)}} variant="link">Log in.</Button>
 								</div>
 							</div>
 						</div>

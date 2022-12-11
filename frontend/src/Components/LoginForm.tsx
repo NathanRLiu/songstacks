@@ -35,7 +35,7 @@ function LoginForm(props:FormInput) {
 			<Form.Check className={styles["form-label"]} type="checkbox" label="Remember me" />
 		      </Form.Group>
 		      <div className={"d-grid gap-2 "+styles["form-button-container"]}>
-			      <Button variant="outline-primary" type="submit" onClick={()=> props.onSubmit()}>
+			      <Button variant="outline-primary" type="submit" onClick={(event)=> props.onSubmit(event)}>
 					Log in
 			      </Button>
 			      <Button variant="outline-secondary">

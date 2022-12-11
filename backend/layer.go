@@ -113,7 +113,16 @@ func createLayer(c *gin.Context) {
 	parent := c.Request.FormValue("parentid")
 	name := c.Request.FormValue("name")
 	description := c.Request.FormValue("description")
-	data, _, _ := c.Request.FormFile("audio")
+	log.Printf(parent)
+	log.Printf(description)
+	log.Printf(name)
+	data, _, err := c.Request.FormFile("audio")
+	if (err!=nil) {
+		log.Printf(err.Error())
+		return
+	} else {
+		log.Printf("received audio file")
+	}
 	buf := bytes.NewBuffer(nil)
 	if _, err := io.Copy(buf, data); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"Success": false})

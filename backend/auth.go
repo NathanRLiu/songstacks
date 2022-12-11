@@ -78,6 +78,7 @@ func Logout(c *gin.Context) {
 }
 
 func Signup(c *gin.Context) {
+	session, _ := sessionStore.Get(c.Request, "session-name")
 	var body Auth
 	c.BindJSON(&body)
 	username := body.Username
@@ -105,5 +106,7 @@ func Signup(c *gin.Context) {
 	log.Printf(string(hashedPassword))
 	newUser := User{Username: username, Password: string(hashedPassword), Songs: ""}
 	coll.InsertOne(context.TODO(), newUser)
+	session.Values["username"] = username
+	session.Save(c.Request, c.Writer)
 	c.JSON(http.StatusOK, gin.H{"Success": true})
 }
