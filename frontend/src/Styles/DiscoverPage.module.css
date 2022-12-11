@@ -113,6 +113,9 @@
 .section:nth-child(even){
 	padding-top:20px;
 }
+.fifth-section{
+	padding-top:20px;
+}
 .right-tab h1 {
 	font-size:24px;
 }
@@ -151,23 +154,34 @@ input[type=range] {
 
 .searchBar {
 	background-color: white;
+	position:absolute;
+	right:30px;
 	margin-left: 30px;
-	width: 250px;
+	margin-top:-30px;
+	width: 350px;
 	border-radius: 4px;
 	padding: 4px;
+}
+.searchBar > i {
+	margin-left:10px;
+	margin-right:5px;
+	position:absolute;
 }
 
 .searchBar > input {
 	border: none;
 	width: 225px;
+	margin-left:30px;
 }
-
+.searchBar > input:focus-visible {
+	outline:none;
+}
 .searchError {
 	color: white;
 }
 
 .song-card {
-	background-color:#202020cc;
+	background-color:#252325;
 	width:250px;
 	height:350px;
 	border-radius:9px;
@@ -178,16 +192,18 @@ input[type=range] {
 	margin-right: 10px;
 	margin-bottom: 10px;
 	flex-direction: column;
+	font-family:Figtree;
 }
 
 .song-card > div {
+	background-color:#202020;
 	width:90%;
 	height:93%;
-	border:#64316d 3px solid;
 	border-radius:9px;
 }
 .song-card > div > img {
 	width:80%;
+	aspect-ratio:1;
 	margin:auto;
 	display:block;
 	margin-top:10%;
