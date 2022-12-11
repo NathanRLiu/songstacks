@@ -21,10 +21,10 @@ function SignupForm(props:FormInput) {
 			
 			<h1>Sign Up <img src={logo} className={styles["songstacks-logo"]}/></h1>
 
-			<Form.Label className={styles["form-label"]}>Email address</Form.Label>
-			<Form.Control className={styles["form-input"]}type="email" placeholder="Enter email" value={props.email} onChange={(event)=> props.setEmail(event.target.value)}/>
+			<Form.Label className={styles["form-label"]}>Username</Form.Label>
+			<Form.Control className={styles["form-input"]}type="email" placeholder="Enter username" value={props.email} onChange={(event)=> props.setEmail(event.target.value)}/>
 			<Form.Text className="text-muted">
-			  We'll never share your email with anyone else.
+			  Make it something creative!
 			</Form.Text>
 		      </Form.Group>
 

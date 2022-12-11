@@ -20,11 +20,8 @@ function LoginForm(props:FormInput) {
 			
 			<h1>Login <img src={logo} className={styles["songstacks-logo"]}/></h1>
 
-			<Form.Label className={styles["form-label"]}>Email address</Form.Label>
-			<Form.Control className={styles["form-input"]}type="email" placeholder="Enter email" value={props.email} onChange={(event)=> props.setEmail(event.target.value)}/>
-			<Form.Text className="text-muted">
-			  We'll never share your email with anyone else.
-			</Form.Text>
+			<Form.Label className={styles["form-label"]}>Username</Form.Label>
+			<Form.Control className={styles["form-input"]}type="email" placeholder="Enter username" value={props.email} onChange={(event)=> props.setEmail(event.target.value)}/>
 		      </Form.Group>
 
 		      <Form.Group className="mb-3" controlId="formBasicPassword">
