@@ -18,6 +18,10 @@ function Dashboard() {
 			if ("Error" in response.data) {
 				return;
 			}
+			if (response.data.results==null) {
+				setArtistSongs([]);
+				return;
+			}
 			setArtistSongs(response.data.results);
 		}
 		fetchData();

@@ -11,7 +11,7 @@ interface Layer {
 	Description: string,
 	layerID: string
 }
-function StackView (props: {"layerStack": Layer[], "activeLayer": number, "setActiveLayer": Function}) {
+function StackView (props: {"layerStack": Layer[], "activeLayer": number, "setActiveLayer": Function, "setActiveLayerID": Function}) {
 return (
 		<div>
 			<h1 style={{"marginLeft": "20px", "marginTop": "10px"}}>Your Stack</h1>
@@ -20,7 +20,10 @@ return (
 					props.layerStack.map((layer, index) => {
 						const style = (index==props.activeLayer) ? {"backgroundColor": "#932fa7"}: {};
 						return (
-							<button className={styles.layerCard} style={style} onClick={()=>props.setActiveLayer(index)}>
+							<button className={styles.layerCard} style={style} onClick={()=>{
+								props.setActiveLayer(index);
+								props.setActiveLayerID(layer.layerID);
+							}}>
 								<h3 className={styles.stackText}>{`Layer ${index+1}: ${layer.Name}`}</h3>
 							</button>
 						)

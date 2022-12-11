@@ -52,6 +52,7 @@ function SongPage() {
 	const [activeLayer, setActiveLayer] = useState(0);
 	const [layerStack, setLayerStack] = useState<any[]>([]);
 	const [audioKey, setAudioKey] = useState(Date.now());
+	const [activeLayerID, setActiveLayerID] = useState("");
 
 	useEffect(() => {
 		const delayDebounceFn = setTimeout(() => {
@@ -148,7 +149,7 @@ function SongPage() {
 						onChange={
 							(event) => {
 								if (!event.target.files) return;
-								setAudioFile(URL.createObjectURL(event.target.files[0]));
+								setAudioFile(event.target.files[0]);
 							}
 						}
 					/>
@@ -167,7 +168,8 @@ function SongPage() {
 						let cover = await fetch(songImage)
 							.then(r => r.blob())
 							.then(blobFile => new File([blobFile], "fileNameGoesHere", { type: "image/png" }));
-						formData.append("audio", new File([audioFile], "fileName"));
+						console.log(audioFile);
+						formData.append("audio", new File([audioFile], "fileName", {type: "audio/mp3"}));
 						formData.append("cover", cover);
 						publish(true);
 						const result = await axios.post('/api/layer/create',formData,
@@ -180,6 +182,7 @@ function SongPage() {
 						let newLayers = [...layerStack];
 						newLayers.push({"Name": title, "Description": description, "layerID": result.data.layerID});
 						setActiveLayer(newLayers.length-1);
+						setActiveLayerID(result.data.layerID);
 						setLayerStack(newLayers);
 						setTitle("");
 						setDescription("");
@@ -196,12 +199,13 @@ function SongPage() {
 			</div> 
 			<div className={ styles["editor-section"] } >
 				{layerStack.length>0 ? 
-				<div>
+				<div className={"audio-waves-container"}>
 					<div className={styles["audio-waves"]}>
 					<AudioWave
-						layerID={"639636af27a70e2cffd1c045"}
-						width={800}
-						height={200}
+						layerID={activeLayerID}
+						key={activeLayerID}
+						width={400}
+						height={80}
 						isPlaying={isPlaying} 
 						setTotalTime={setTrackLength}
 						setTime={setTimeSec}
@@ -225,7 +229,7 @@ function SongPage() {
 			</div>
 			<div className={ styles["stack-view-container"] }>
 				<div className={ styles["stack-view"] } >
-					<StackView layerStack={layerStack} activeLayer={activeLayer} setActiveLayer={setActiveLayer}/>
+					<StackView layerStack={layerStack} activeLayer={activeLayer} setActiveLayer={setActiveLayer} setActiveLayerID={setActiveLayerID}/>
 				</div>
 			</div>
 			<div className={ styles["layer-finder-container"] } >
@@ -249,6 +253,7 @@ function SongPage() {
 										let newLayers = [...layerStack];
 										newLayers.push({"Name": layerInfo.name, "Description": layerInfo.description, "layerID": layerInfo["_id"]});
 										setActiveLayer(newLayers.length-1);
+										setActiveLayerID(layerInfo["_id"]);
 										setLayerStack(newLayers);
 									}}
 								>
