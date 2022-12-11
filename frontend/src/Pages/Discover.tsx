@@ -157,19 +157,28 @@ function DiscoverDisplay() {
 function SearchDisplay(props: {searchTerm: string, setDisplaySearch: Function}) {
 	const [searchResults, setSearchResults] = useState<any[]>([]);
 	useEffect(() => {
-		if (props.searchTerm=='') {
-			return;
-		}
-		const getUser = async () => {
-			const response = await axios.get(`/api/layer/search/?search=${props.searchTerm}`, { withCredentials: true });
-			console.log(response.data);
-			if (response.data==null) {
-				setSearchResults([]);
+		const delayDebounceFn = setTimeout(() => {
+		  console.log(props.searchTerm)
+		  // Send Axios request here
+			if (props.searchTerm=='') {
 				return;
 			}
-			setSearchResults(response.data.searchResults);
-		}
-		getUser();
+			const getUser = async () => {
+				const response = await axios.get(`/api/layer/search/?search=${props.searchTerm}`, { withCredentials: true });
+				console.log(response.data);
+				if (response.data==null) {
+					setSearchResults([]);
+					return;
+				}
+				setSearchResults(response.data.searchResults);
+			}
+			getUser();
+		}, 2000)
+	
+		return () => clearTimeout(delayDebounceFn)
+	  }, [props.searchTerm])
+	useEffect(() => {
+		
 	}, [props.searchTerm])
 	return (
 		<div style={{display: "flex", flexDirection: "row", margin: "25px"}}>
@@ -178,8 +187,8 @@ function SearchDisplay(props: {searchTerm: string, setDisplaySearch: Function}) 
 					return (
 						<div key={id} className={styles["song-card"]} >
 							<div>
-								<img src={JavasPlan} />
-								<h2>{result.Name}</h2>
+								<img src={`/api/layer/getCover/?coverid=${result["_id"]}`} />
+								<h2>{result.name}</h2>
 							</div>
 							
 						</div>
