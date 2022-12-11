@@ -11,6 +11,7 @@ import styles from '../Styles/SongPage.module.css'
 import AudioWave from '../Components/AudioWave';
 import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
 import { BiSkipPrevious, BiSkipNext } from 'react-icons/bi';
+import { FaPlus } from 'react-icons/fa';
 
 type SongCardProps = {
 	"Title":string;
@@ -23,8 +24,12 @@ function SongCard({ Title, Cover}: SongCardProps) {
 	return (
 		<div className={styles["song-card"]}>
 			<div className={styles["album-cover-container"]}>
+				<div className={styles["hover-overlay"]} >
+					<i><FaPlus /></i>
+					<p>{Title}</p>
+				</div>
 				<img className={styles["album-cover"]} src={Cover} />
-				<p>{Title}</p>
+				
 			</div>
 		</div>
 	)
@@ -47,6 +52,7 @@ function SongPage() {
 	const [activeLayer, setActiveLayer] = useState(0);
 	const [layerStack, setLayerStack] = useState<any[]>([]);
 	const [audioKey, setAudioKey] = useState(Date.now());
+
 	useEffect(() => {
 		const delayDebounceFn = setTimeout(() => {
 		  console.log(searchTerm)
@@ -152,7 +158,10 @@ function SongPage() {
 					onClick={async ()=> {
 						if (audioFile==null) return;
 						const formData = new FormData();
-						formData.append('parentid', '');
+						if (layerStack.length>0) {
+							formData.append('parentid', layerStack[layerStack.length-1].layerID);
+						}
+						else formData.append('parentid', '');
 						formData.append('description', description);
 						formData.append('name', title);
 						let cover = await fetch(songImage)
@@ -234,14 +243,25 @@ function SongPage() {
 					</div>
 					<div className={styles["search-results"]}>
 						{searchResults.map((layerInfo, i) => (
-								<SongCard 
-									key={i}
-									Title={layerInfo.name}
-									Type="Beat"
-									Length="3:35"
-									Artist="Artist Name"
-									Cover={`/api/layer/getCover/?coverid=${layerInfo["_id"]}`}
-								/>
+								<button 
+									style={{all: "unset"}} 
+									onClick={() => {
+										let newLayers = [...layerStack];
+										newLayers.push({"Name": layerInfo.name, "Description": layerInfo.description, "layerID": layerInfo["_id"]});
+										setActiveLayer(newLayers.length-1);
+										setLayerStack(newLayers);
+									}}
+								>
+									<SongCard 
+										key={i}
+										Title={layerInfo.name}
+										Type="Beat"
+										Length="3:35"
+										Artist="Artist Name"
+										Cover={`/api/layer/getCover/?coverid=${layerInfo["_id"]}`}
+									/>
+								</button>
+								
 							))
 						}
 					</div>

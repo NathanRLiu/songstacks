@@ -237,17 +237,54 @@
 	border-radius:10px;
 	margin-right:20px;
 }
+.album-cover-container .hover-overlay{
+	width:100%;
+	height: 100%;
+	aspect-ratio:1;
+	position:absolute;
+	transition:opacity .5s ease-out;
+	content:'';
+	background-color:#000000;
+	opacity:0;
+}
+.album-cover-container:hover .hover-overlay {
+	opacity:0.8;
+}
+.album-cover-container{
+	cursor:pointer;
+	overflow: hidden;
+}
+.hover-overlay{
+	all: unset;
+	display:flex;
+	flex-direction: column;
+	align-items:center;
+	justify-content:center;
+
+}
+.hover-overlay > i {
+	color:white;
+	font-size:80px;
+	width:50px;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	text-align:center;
+}
+.hover-overlay > p {
+	font-size: 20px;
+}
 .album-cover {
 	height:100%;
 	aspect-ratio:1;
 }
 .album-cover-container {
-	height:60%;
-	width: 60%;
+	height:100%;
+	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 10px;
 	position:relative;
+	border-radius: 5px;
 }
 .album-cover-container > p {
 	text-align: center;
