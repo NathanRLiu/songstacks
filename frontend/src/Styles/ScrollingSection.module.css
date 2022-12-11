@@ -37,6 +37,9 @@
 .album-cover-wrapper{
 	cursor:pointer;
 }
+.album-cover-wrapper > img {
+	aspect-ratio:1;
+}
 .hover-overlay{
 	display:flex;
 	align-items:center;

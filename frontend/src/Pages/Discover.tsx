@@ -1,6 +1,7 @@
 import { transform } from "typescript";
 import { useState, useEffect } from "react";
 import ScrollingSection from "../Components/ScrollingSection";
+import ScrollingLayers from "../Components/ScrollingLayers";
 import SideNav from "../Components/SideNav";
 import styles from '../Styles/DiscoverPage.module.css';
 import axios from "axios";
@@ -17,12 +18,16 @@ import NavBar from "../Components/NavBar";
 interface searchResults {
 	results: Array<Object>
 }
-function LeftPanel(){
+function LeftPanel(props:{
+		layer:{
+			id:string;
+
+		}
+	}) {
 	const [isPlaying, setPlaying] = useState(false);
 	const [trackLength, setTrackLength] = useState(1);
 	const [timeSec, setTimeSec] = useState(0);
 	const timeFormat = (timeSeconds:number) => {
-
 		const time = Math.ceil(timeSeconds);
 		var minutes = Math.floor(time / 60);
 		var seconds = time % 60;
@@ -35,12 +40,22 @@ function LeftPanel(){
 		var finalTime = minutes+':'+str_pad_left(seconds,'0',2);
 		return finalTime;
 	}
+	if (props.layer.id == "0"){
+		return(
+			<div className={styles["side-dashboard"]}>
+				<div className={styles["now-playing"]}>
+					<h1> Now Playing </h1>
+					<div> No song selected</div>
+				</div>
+			</div>
+		)
+	}
 	return(
 		<div className={styles["side-dashboard"]}>
 			<div className={styles["now-playing"]}>
 				<h1> Now Playing </h1>
 				<div className={styles["current-track"]}>
-					<img src={JavasPlan} />
+					<img src={`/api/layer/getCover/?coverid=${props.layer.id}`} />
 				</div>
 				<h2> {"Java's Plan"}</h2>
 				<h3> Samih R Liu</h3>
@@ -68,7 +83,7 @@ function LeftPanel(){
 				</div>
 				<div className={styles["audio-waves"]}>
 					<AudioWave
-						layerID="63952cdcba8f09e5ba64c58a"
+						layerID={props.layer.id}
 						width={250}
 						height={80}
 						isPlaying={isPlaying} 
@@ -81,11 +96,26 @@ function LeftPanel(){
 		</div>
 	)
 }
-function DiscoverDisplay() {
+function DiscoverDisplay(props: {show:boolean, selectSong:Function}) {
 	const [images_recent, setCarouselImages] = useState<string[]>([]);
 	const [images_popular, setPopularImages] = useState<string[]>([]);
 	const [images_roadtrip, setRoadtripImages] = useState<string[]>([]);
 	const [images_classic, setClassicImages] = useState<string[]>([]);
+	const [searchResults, setSearchResults] = useState<{"_id":string}[]>([]);
+
+	useEffect(() => {
+	const getUser = async () => {
+		const response = await axios.get(`/api/layer/search?search=`, { withCredentials: true });
+		if (response.data==null) {
+			setSearchResults([]);
+			return;
+		}
+		setSearchResults(response.data.searchResults);
+	}
+	getUser();
+
+	}, [])
+
 	useEffect(() => {
 		let res : string[] = [];
 		let fetchData = async () => {
@@ -93,7 +123,6 @@ function DiscoverDisplay() {
 				const album = await albumArt( cover["artist"], cover["info"] );
 				res.push(album);
 			}
-			console.log("1");
 		}
 		fetchData().then( ()=> setPopularImages(res) );
 		let res2 : string[] = [];
@@ -102,7 +131,6 @@ function DiscoverDisplay() {
 				const album = await albumArt( cover["artist"], cover["info"] );
 				res2.push(album);
 			}
-			console.log("1");
 		}
 		fetchData().then( ()=> setCarouselImages(res2) );
 		let res3 : string[] = [];
@@ -111,7 +139,6 @@ function DiscoverDisplay() {
 				const album = await albumArt( cover["artist"], cover["info"] );
 				res3.push(album);
 			}
-			console.log("1");
 		}
 		fetchData().then( ()=> setRoadtripImages(res3) );
 
@@ -126,7 +153,7 @@ function DiscoverDisplay() {
 	},[])
 
 	return (
-		<div className={styles["discover"]}>
+		<div className={styles["discover"]} style={props.show?{}:{display:"none"}}>
 			<div className={styles["third-section"] + " " + styles["section"]}>
 				<h1> Currently Trending </h1>
 				<ScrollingSection isUp={false} carouselImages={images_popular} animationDuration="60s" width="15vw" marginBottom="1vw"/>
@@ -139,13 +166,14 @@ function DiscoverDisplay() {
 
 			<div className={styles["second-section"] + " " + styles["section"]}>
 				<h1>Hit The Road</h1>
-				<div className={styles["top-subsection"]}>
-					<ScrollingSection isUp={false} carouselImages={images_roadtrip} animationDuration="85s" width="15vw" marginBottom="1vw"/>
-				</div>
+					<div className={styles["top-subsection"]}>
+						<ScrollingSection isUp={false} carouselImages={images_roadtrip} animationDuration="85s" width="15vw" marginBottom="1vw"/>
+					</div>
 				</div>
 			<div className={styles["fourth-section"] + " " + styles["section"]}>
 				<h1>SongStacks' Featured</h1>
-				<ScrollingSection isUp={true} carouselImages={images_recent} animationDuration="85s" width="15vw" marginBottom="1vw"/>
+				{searchResults.length > 0 ? <ScrollingLayers isUp={true} carouselLayers={searchResults} onClick={(layer:any)=>{props.selectSong(layer)}} animationDuration="85s" width="15vw" marginBottom="1vw"/> : ""
+				}
 			</div>
 			<div className={styles["fifth-section"] + " " + styles["section"]}>
 				<h1>Timeless Classics</h1>
@@ -175,7 +203,7 @@ function SearchDisplay(props: {searchTerm: string, setDisplaySearch: Function}) 
 				setSearchResults(response.data.searchResults);
 			}
 			getUser();
-		}, 2000)
+		}, 500)
 	
 		return () => clearTimeout(delayDebounceFn)
 	}, [props.searchTerm])
@@ -189,7 +217,6 @@ function SearchDisplay(props: {searchTerm: string, setDisplaySearch: Function}) 
 								<img src={`/api/layer/getCover/?coverid=${result["_id"]}`} />
 								<h2>{result.name}</h2>
 							</div>
-							
 						</div>
 					)
 				}):
@@ -202,9 +229,15 @@ function Dashboard() {
 	const navigate = useNavigate();
 	const [displaySearch, setDisplaySearch] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
+	const [selectedSong, selectSong] = useState(
+		{
+			"id":"0",
+			"title":"No Song Selected",
+		}
+	);
 	return (
 		<div className={styles["background"]}>
-			<LeftPanel />	
+			<LeftPanel layer={selectedSong} />	
 			<div className={styles["right-tab"]}>
 				<NavBar />
 				<h1> Discover </h1>
@@ -220,11 +253,13 @@ function Dashboard() {
 						}}
 					/>
 				</div>
-				{displaySearch ? <SearchDisplay searchTerm={searchTerm} setDisplaySearch={setDisplaySearch}/> : <DiscoverDisplay />}
+				{displaySearch ? <SearchDisplay searchTerm={searchTerm} setDisplaySearch={setDisplaySearch}/> : ""}
+				<DiscoverDisplay selectSong={selectSong} show={!displaySearch}/>
 			</div>
 		</div>
 	)
 }
+
 const recentlyListened = [
 	{
 		"artist":"Kanye West",
