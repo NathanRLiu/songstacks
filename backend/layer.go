@@ -113,6 +113,12 @@ func createLayer(c *gin.Context) {
 	parent := c.Request.FormValue("parentid")
 	name := c.Request.FormValue("name")
 	description := c.Request.FormValue("description")
+	data, _, _ := c.Request.FormFile("audio")
+	buf := bytes.NewBuffer(nil)
+	if _, err := io.Copy(buf, data); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Success": false})
+	    return
+	}
 	log.Printf(name)
 	client, merr := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
 	if merr != nil {
@@ -265,8 +271,8 @@ func searchLayer(c *gin.Context) {
 		}
 	}()
 	coll := client.Database("songDB").Collection("layers")
-	filter := bson.D{{"name", primitive.Regex{Pattern: name, Options: ""}}}
-	var resultsArray []Layer
+	filter := bson.D{{"name", primitive.Regex{Pattern: name, Options: "i"}}}
+	var resultsArray []bson.M
 	searchResult, err := coll.Find(context.TODO(), filter)
 	if err != nil {
 		log.Printf(err.Error())
