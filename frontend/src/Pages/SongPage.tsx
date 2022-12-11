@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect} from 'react';
 import { BrowserRouter, Route, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
@@ -16,15 +16,12 @@ type SongCardProps = {
 	"Cover":string;
 	"Artist":string;
 }
-function SongCard({ Title, Type, Length, Cover, Artist }: SongCardProps) {
+function SongCard({ Title, Cover}: SongCardProps) {
 	return (
 		<div className={styles["song-card"]}>
 			<div className={styles["album-cover-container"]}>
 				<img className={styles["album-cover"]} src={Cover} />
-				<div className={styles["track-length"]}>{Length} </div>
-				<div className={styles["track-title"]}>{Title}</div>
-				<div className={styles["track-artist"]}>{Artist}</div>
-				<div className={styles["track-type"]}>{Type}</div>
+				<p>{Title}</p>
 			</div>
 		</div>
 	)
@@ -36,12 +33,31 @@ function SongPage() {
 	const [ title, setTitle ] = useState("");
 	const [published, publish] = useState(false);
 	const [ genre, setGenre ] = useState("");
-	const [ searchedLayers, setSearchedLayers ] = useState<{ID:string;Name:string;ParentLayer:string;ChildLayers:Array<any>;LayerCut:number}[]>([]);
+	const [searchResults, setSearchResults] = useState<any[]>([]);
+	const [searchTerm, setSearchTerm] = useState("");
 	const [parentLayer, setParentLayer] = useState("");
 
 	const [ description, setDescription ] = useState("");
 	const [ audioFile, setAudioFile ] = useState<null | Blob | string>();
 	const [ songImage, setSongImage ] = useState(logo);
+	useEffect(() => {
+		const delayDebounceFn = setTimeout(() => {
+		  console.log(searchTerm)
+		  // Send Axios request here
+			const getUser = async () => {
+				const response = await axios.get(`/api/layer/search/?search=${searchTerm}`, { withCredentials: true });
+				console.log(response.data);
+				if (response.data.searchResults==null) {
+					setSearchResults([]);
+					return;
+				}
+				setSearchResults(response.data.searchResults);
+			}
+			getUser();
+		}, 2000)
+	
+		return () => clearTimeout(delayDebounceFn)
+	}, [searchTerm])
 	return (
 	<div className={ styles.background } >
 		<NavBar />
@@ -164,18 +180,20 @@ function SongPage() {
 							<input
 							    type="text"
 							    placeholder="Search..."
+								value={searchTerm}
+								onChange={(event) => setSearchTerm(event.target.value)}
 							/>
 						</div>
 					</div>
 					<div className={styles["search-results"]}>
-						{searchedLayers.map((layerInfo, i) => (
+						{searchResults.map((layerInfo, i) => (
 								<SongCard 
 									key={i}
-									Title={layerInfo.Name}
+									Title={layerInfo.name}
 									Type="Beat"
 									Length="3:35"
 									Artist="Artist Name"
-									Cover=""
+									Cover={`/api/layer/getCover/?coverid=${layerInfo["_id"]}`}
 								/>
 							))
 						}
