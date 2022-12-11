@@ -301,3 +301,34 @@ func searchLayer(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"searchResults": resultsArray})
 	return
 }
+
+func getArtistLayers(c* gin.Context) {
+	session, _ := sessionStore.Get(c.Request, "session-name")
+	currentUser := session.Values["username"]
+	if (currentUser==nil) {
+		c.JSON(http.StatusOK, gin.H{"Error": "Not Logged In"})
+		return
+	}
+	client, merr := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+	if merr != nil {
+		log.Printf("panicking");
+		panic(merr)
+	}
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			log.Printf("panicking2");
+			panic(err)
+		}
+	}()
+	db := client.Database("songDB")
+	coll := db.Collection("layers");
+	var layerList []LayerWithID
+	result, err := coll.Find(context.TODO(), bson.M{"artist": currentUser.(string)})
+	if err != nil {
+		log.Printf(err.Error())
+		c.JSON(http.StatusOK, gin.H{"Error": "No Results Found"});
+		return
+	}
+	result.All(context.TODO(), &layerList)
+	c.JSON(http.StatusOK, gin.H{"results": layerList})
+}
