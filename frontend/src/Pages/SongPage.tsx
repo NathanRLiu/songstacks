@@ -197,7 +197,7 @@ function SongPage() {
 					Add Layer
 				</button>
 				<button 
-					className={styles["publish-button"]} style={{"backgroundColor": "gray", "marginTop": "5px"}}
+					className={styles["publish-button"]} style={{"backgroundColor": "gray", "marginTop": "5px", "color": "white", "borderColor": "white", "borderWidth": "1px"}}
 					onClick={() => navigate('/dashboard')}
 				>
 					Done Working
@@ -229,7 +229,7 @@ function SongPage() {
 						</div>
 					</div>
 				</div>: 
-				<h1 style={{marginTop: "280px", textAlign:"center"}}>No Layers Added. . . </h1>}
+				<h1 style={{marginTop: "230px", textAlign:"center"}}>No Layers Added... </h1>}
 				
 			</div>
 			<div className={ styles["stack-view-container"] }>
