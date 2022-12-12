@@ -1,6 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
 import './App.css';
 import logo from './songstacks.png';
 
@@ -30,7 +31,6 @@ function App() {
 						<Route path="discover" element={<Discover />} />
 						<Route path="playSong" element={<AudioPlayer layerID="639195396a87541d9f68c848"/>} />
 						<Route path="dashboard" element={<ArtistDashboard />} />
-						<Route path="wave"  element={<AudioWave layerID="639195396a87541d9f68c848" width={920} height={200} isPlaying={false} setTime={()=>{}} setTotalTime={()=>{}} volumeStyle={{}}/>}  />
 					</Route>
 				</Routes>
 			</BrowserRouter>

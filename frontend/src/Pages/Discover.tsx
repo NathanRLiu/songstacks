@@ -1,29 +1,37 @@
 import { transform } from "typescript";
 import { useState, useEffect } from "react";
-import ScrollingSection from "../Components/ScrollingSection";
-import ScrollingLayers from "../Components/ScrollingLayers";
 import SideNav from "../Components/SideNav";
 import styles from '../Styles/DiscoverPage.module.css';
 import axios from "axios";
 import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa';
 import { BiSkipPrevious, BiSkipNext } from 'react-icons/bi';
 import AudioWave from '../Components/AudioWave';
-import JavasPlan from '../javasplan.png'
 import logo from '../songstacks.png'
 import { AiOutlineSearch } from "react-icons/ai";
 import albumArt from "album-art";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../Components/NavBar";
+import DiscoverDisplay from "../Components/DiscoverSection";
+import { useDispatch, useSelector } from 'react-redux';
+import {actions} from '../slice';
+import store from '../store';
+
+type RootState = ReturnType<typeof store.getState>;
 
 interface searchResults {
 	results: Array<Object>
 }
-function LeftPanel(props:{
-		layer:{
-			id:string;
+interface Layer {
+	_id: string;
+	artist:string;
+	childlayers:string[];
+	description:string;
+	name:string;
+	parentlayer:string;
+}
+function LeftPanel() {
+	const layer = useSelector((state: RootState) => state.songSelector.value);
 
-		}
-	}) {
 	const [isPlaying, setPlaying] = useState(false);
 	const [trackLength, setTrackLength] = useState(1);
 	const [timeSec, setTimeSec] = useState(0);
@@ -34,13 +42,13 @@ function LeftPanel(props:{
 		console.log(seconds);
 
 		function str_pad_left(string:number,pad:any,length:number) {
-				return (new Array(length+1).join(pad)+string).slice(-length);
+			return (new Array(length+1).join(pad)+string).slice(-length);
 		}
 
 		var finalTime = minutes+':'+str_pad_left(seconds,'0',2);
 		return finalTime;
 	}
-	if (props.layer.id == "0"){
+	if (layer._id == "0"){
 		return(
 			<div className={styles["side-dashboard"]}>
 				<div className={styles["now-playing"]}>
@@ -55,9 +63,9 @@ function LeftPanel(props:{
 			<div className={styles["now-playing"]}>
 				<h1> Now Playing </h1>
 				<div className={styles["current-track"]}>
-					<img src={`/api/layer/getCover/?coverid=${props.layer.id}`} />
+					<img src={`/api/layer/getCover?coverid=${layer["_id"]}`} />
 				</div>
-				<h2> {"Java's Plan"}</h2>
+				<h2> {layer["name"]}</h2>
 				<h3> Samih R Liu</h3>
 
 				<div className={styles["progress-bar"]}>
@@ -83,7 +91,7 @@ function LeftPanel(props:{
 				</div>
 				<div className={styles["audio-waves"]}>
 					<AudioWave
-						layerID={props.layer.id}
+						layerID={layer["_id"]}
 						width={250}
 						height={80}
 						isPlaying={isPlaying} 
@@ -96,95 +104,12 @@ function LeftPanel(props:{
 		</div>
 	)
 }
-function DiscoverDisplay(props: {show:boolean, selectSong:Function}) {
-	const [images_recent, setCarouselImages] = useState<string[]>([]);
-	const [images_popular, setPopularImages] = useState<string[]>([]);
-	const [images_roadtrip, setRoadtripImages] = useState<string[]>([]);
-	const [images_classic, setClassicImages] = useState<string[]>([]);
-	const [searchResults, setSearchResults] = useState<{"_id":string}[]>([]);
 
-	useEffect(() => {
-	const getUser = async () => {
-		const response = await axios.get(`/api/layer/search?search=`, { withCredentials: true });
-		if (response.data==null) {
-			setSearchResults([]);
-			return;
-		}
-		setSearchResults(response.data.searchResults);
-	}
-	getUser();
-
-	}, [])
-
-	useEffect(() => {
-		let res : string[] = [];
-		let fetchData = async () => {
-			for (let cover of popular) {
-				const album = await albumArt( cover["artist"], cover["info"] );
-				res.push(album);
-			}
-		}
-		fetchData().then( ()=> setPopularImages(res) );
-		let res2 : string[] = [];
-		fetchData = async () => {
-			for (let cover of recentlyListened) {
-				const album = await albumArt( cover["artist"], cover["info"] );
-				res2.push(album);
-			}
-		}
-		fetchData().then( ()=> setCarouselImages(res2) );
-		let res3 : string[] = [];
-		fetchData = async () => {
-			for (let cover of roadtrip) {
-				const album = await albumArt( cover["artist"], cover["info"] );
-				res3.push(album);
-			}
-		}
-		fetchData().then( ()=> setRoadtripImages(res3) );
-
-		let res4 : string[] = [];
-		fetchData = async () => {
-			for (let cover of classics) {
-				const album = await albumArt( cover["artist"], cover["info"] );
-				res4.push(album);
-			}
-		}
-		fetchData().then( ()=> setClassicImages(res4) );
-	},[])
-
-	return (
-		<div className={styles["discover"]} style={props.show?{}:{display:"none"}}>
-			<div className={styles["third-section"] + " " + styles["section"]}>
-				<h1> Currently Trending </h1>
-				<ScrollingSection isUp={false} carouselImages={images_popular} animationDuration="60s" width="15vw" marginBottom="1vw"/>
-			</div>
-
-			<div className={styles["first-section"] + " " + styles["section"]}>
-				<h1>Resume Playing</h1>
-				<ScrollingSection isUp={true} carouselImages={images_recent} animationDuration="50s" width="15vw" marginBottom="1vw"/>
-			</div>
-
-			<div className={styles["second-section"] + " " + styles["section"]}>
-				<h1>Hit The Road</h1>
-					<div className={styles["top-subsection"]}>
-						<ScrollingSection isUp={false} carouselImages={images_roadtrip} animationDuration="85s" width="15vw" marginBottom="1vw"/>
-					</div>
-				</div>
-			<div className={styles["fourth-section"] + " " + styles["section"]}>
-				<h1>SongStacks' Featured</h1>
-				{searchResults.length > 0 ? <ScrollingLayers isUp={true} carouselLayers={searchResults} onClick={(layer:any)=>{props.selectSong(layer)}} animationDuration="85s" width="15vw" marginBottom="1vw"/> : ""
-				}
-			</div>
-			<div className={styles["fifth-section"] + " " + styles["section"]}>
-				<h1>Timeless Classics</h1>
-				<div className={styles["bottom-subsection"]}>
-					<ScrollingSection isUp={false} carouselImages={images_classic} animationDuration="95s" width="15vw" marginBottom="1vw"/>
-				</div>
-			</div>
-		</div>
-	)
-}
 function SearchDisplay(props: {searchTerm: string, setDisplaySearch: Function}) {
+	const dispatch = useDispatch();
+        const setSong = (newLayer:Layer) => {
+                dispatch(actions.selectSong(newLayer))
+        }
 	const [searchResults, setSearchResults] = useState<any[]>([]);
 	useEffect(() => {
 		const delayDebounceFn = setTimeout(() => {
@@ -208,11 +133,11 @@ function SearchDisplay(props: {searchTerm: string, setDisplaySearch: Function}) 
 		return () => clearTimeout(delayDebounceFn)
 	}, [props.searchTerm])
 	return (
-		<div style={{display: "flex", flexDirection: "row", margin: "25px"}}>
+		<div style={{display: "flex", flexDirection: "row", margin: "25px", flexWrap:"wrap"}}>
 			{
 				searchResults!=null ? searchResults.map((result, id) => {
 					return (
-						<div key={id} className={styles["song-card"]} >
+						<div key={id} className={styles["song-card"]} onClick={() => setSong(result)} >
 							<div>
 								<img src={`/api/layer/getCover/?coverid=${result["_id"]}`} />
 								<h2>{result.name}</h2>
@@ -229,15 +154,10 @@ function Dashboard() {
 	const navigate = useNavigate();
 	const [displaySearch, setDisplaySearch] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
-	const [selectedSong, selectSong] = useState(
-		{
-			"id":"0",
-			"title":"No Song Selected",
-		}
-	);
+
 	return (
 		<div className={styles["background"]}>
-			<LeftPanel layer={selectedSong} />	
+			<LeftPanel />	
 			<div className={styles["right-tab"]}>
 				<NavBar />
 				<h1> Discover </h1>
@@ -254,129 +174,10 @@ function Dashboard() {
 					/>
 				</div>
 				{displaySearch ? <SearchDisplay searchTerm={searchTerm} setDisplaySearch={setDisplaySearch}/> : ""}
-				<DiscoverDisplay selectSong={selectSong} show={!displaySearch}/>
+				<DiscoverDisplay show={!displaySearch}/>
 			</div>
 		</div>
 	)
 }
 
-const recentlyListened = [
-	{
-		"artist":"Kanye West",
-		"info":{album:"Graduation", size: "medium"}
-	},
-	{
-		"artist":"Joji",
-		"info":{album:"Smithereens", size: "medium"}
-	},
-	{
-		"artist":"Drake",
-		"info":{album:"Honestly, Nevermind", size: "medium"}
-	},
-	{
-		"artist":"J. Cole",
-		"info":{album:"Born Sinner", size: "medium"}
-	},
-	{
-		"artist":"Pink Floyd",
-		"info":{album:"The Dark Side of the Moon", size: "medium"}
-	},
-	{
-		"artist":"Clairo",
-		"info":{album:"Hot Cheeto Puffs", size: "medium"}
-	},
-	{
-		"artist":"Kanye West",
-		"info":{album:"Ye", size: "medium"}
-	},
-	{
-		"artist":"Joji",
-		"info":{album:"Ballads", size: "medium"}
-	},
-
-	{
-		"artist":"Playboi Carti",
-		"info":{album:"Whole Lotta Red", size: "medium"}
-	},
-	{
-		"artist":"Illenium",
-		"info":{album:"Gold (Stupid Love)", size: "medium"}
-	},
-]
-const popular = [
-	{
-		"artist":"Taylor Swift",
-		"info":{album:"Midnights", size: "medium"}
-	},
-	{
-		"artist":"Harry Styles",
-		"info":{album:"As It Was", size: "medium"}
-	},
-	{
-		"artist":"Metro Boomin",
-		"info":{album:"HEROES & VILLAINS", size: "medium"}
-	},
-	{
-		"artist":"Lil Nas X",
-		"info":{album:"Star Walkin'", size: "medium"}
-	},
-	{
-		"artist":"The Kid LAROI",
-		"info":{album:"STAY (with Justin Bieber)", size: "medium"}
-	},
-	{
-		"artist":"BLACKPINK",
-		"info":{album:"Born Pink", size: "medium"}
-	},
-	{
-		"artist":"The Weeknd",
-		"info":{album:"Starboy", size: "medium"}
-	},
-	{
-		"artist":"Mariah Carey",
-		"info":{album:"Merry Christmas", size: "medium"}
-	},
-
-	{
-		"artist":"JVKE",
-		"info":{album:"Golden Hour", size: "medium"}
-	},
-
-]
-const roadtrip = [
-	{
-		"artist":"Kid Cudi",
-		"info":{album:"Man On The Moon II", size: "medium"}
-	},
-	{
-		"artist":"Miley Cyrus",
-		"info":{album:"The Time of Our Lives", size: "medium"}
-	},
-	{
-		"artist":"Fuzzybrain",
-		"info":{album:"Dayglow", size: "medium"}
-	},
-]
-const classics = [
-	{
-		"artist":"The Beatles",
-		"info":{album:"Love", size: "medium"}
-	},
-	{
-		"artist":"Michael Jackson",
-		"info":{album:"Dangerous", size: "medium"}
-	},
-	{
-		"artist":"Billy Joel",
-		"info":{album:"Piano Man", size: "medium"}
-	},
-	{
-		"artist":"Queen",
-		"info":{album:"Bohemian Rhapsody", size: "medium"}
-	},
-	{
-		"artist":"Eagles",
-		"info":{album:"Hotel California", size: "medium"}
-	},
-]
 export default Dashboard;

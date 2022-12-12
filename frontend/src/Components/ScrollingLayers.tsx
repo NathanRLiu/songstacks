@@ -39,7 +39,7 @@ function ScrollingSection(props:{"isUp": boolean, "carouselLayers":{"_id":string
 									className={styles["album-cover-wrapper"]}
 									key={i} 
 									style={{marginBottom:props.marginBottom}}
-									onClick={()=>{props.onClick(layer["_id"])}}
+									onClick={()=>{props.onClick(layer)}}
 								>
 									<div className={styles["hover-overlay"]} >
 										<i><HiPlay /></i>
@@ -58,9 +58,10 @@ function ScrollingSection(props:{"isUp": boolean, "carouselLayers":{"_id":string
 									className={styles["album-cover-wrapper"]}
 									key={i} 
 									style={{marginBottom:props.marginBottom}}
-									onClick={()=>{props.onClick(layer["_id"])}}
+									onClick={()=>{props.onClick(layer)}}
 								>
 									<div className={styles["hover-overlay"]} >
+										<p></p>
 										<i><HiPlay /></i>
 									</div>
 
