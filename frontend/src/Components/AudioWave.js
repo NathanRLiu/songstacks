@@ -36,6 +36,19 @@ function AudioWave(props:{
 			})
 		}
 	}
+	function seekToTime(time:Number) {
+		if (props.isPlaying){
+			waves.map((layer) => {
+				layer.seekTo(time);
+			})
+		}else{
+			waves.map((layer) => {
+				layer.seekTo(time);
+			})
+		}
+	}
+	React.useEffect(() => seekToTime(Math.max(0, props.scrubTo)),[props.scrubTo]);
+
 	React.useEffect(togglePlay,[props.isPlaying]) 
 	function changeVolume(layerIndex: number, volume: number) {
 		let newVolumes = [...volumes];
@@ -134,7 +147,7 @@ function AudioWave(props:{
 
 				return (
 					<div key={index} style={{"marginBottom":10, }}>
-						{props.disableLayerTitle?<p style={props.volumeStyle}>Layer {index + 1}</p>:""}
+						{!props.disableLayerTitle?<p style={props.volumeStyle}>Layer {index + 1}</p>:""}
 						<input 
 							type="range"
 							min="0"

@@ -35,6 +35,8 @@ function LeftPanel() {
 	const [isPlaying, setPlaying] = useState(false);
 	const [trackLength, setTrackLength] = useState(1);
 	const [timeSec, setTimeSec] = useState(0);
+	const [scrubTo, setScrubTo ] = useState(0);
+
 	const timeFormat = (timeSeconds:number) => {
 		const time = Math.ceil(timeSeconds);
 		var minutes = Math.floor(time / 60);
@@ -68,13 +70,21 @@ function LeftPanel() {
 				<h2> {layer["name"]}</h2>
 				<h3> Samih R Liu</h3>
 
-				<div className={styles["progress-bar"]}>
+				<div 
+					className={styles["progress-bar"]}
+					onClick={(event)=> {
+						    let rect = event.currentTarget.getBoundingClientRect();
+						    let x = event.clientX - rect.left;
+						    console.log(x/(rect.right - rect.left));
+						    setScrubTo(x/(rect.right-rect.left));
+						    setTimeSec(Math.floor((x * trackLength)/(rect.right - rect.left)));
+					}}
+				>
 					<div style={{
 						width:timeSec*100/trackLength + "%",
 						height:"100%",
 						left:0, 
 						backgroundColor:"white",
-						transition:"1s width linear",
 					}} />
 				</div>
 				<p>{timeFormat(timeSec)}/{timeFormat(trackLength)}</p>
@@ -98,6 +108,7 @@ function LeftPanel() {
 						setTotalTime={setTrackLength}
 						setTime={setTimeSec}
 						volumeStyle={{color:"white", "float":"left", marginLeft:20, margin: "auto", marginTop: "5px"}}
+						scrubTo={scrubTo}
 					/>
 				</div>
 			</div>
