@@ -194,7 +194,13 @@ function SongPage() {
 						}
 					}}
 				>
-					{"Publish"}
+					Add Layer
+				</button>
+				<button 
+					className={styles["publish-button"]} style={{"backgroundColor": "gray", "marginTop": "5px"}}
+					onClick={() => navigate('/dashboard')}
+				>
+					Done Working
 				</button>
 			</div> 
 			<div className={ styles["editor-section"] } >
@@ -228,7 +234,7 @@ function SongPage() {
 			</div>
 			<div className={ styles["stack-view-container"] }>
 				<div className={ styles["stack-view"] } >
-					<StackView layerStack={layerStack} activeLayer={activeLayer} setActiveLayer={setActiveLayer} setActiveLayerID={setActiveLayerID}/>
+					<StackView layerStack={layerStack} setLayerStack={setLayerStack} activeLayer={activeLayer} setActiveLayer={setActiveLayer} setActiveLayerID={setActiveLayerID}/>
 				</div>
 			</div>
 			<div className={ styles["layer-finder-container"] } >
