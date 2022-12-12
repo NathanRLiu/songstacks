@@ -19,7 +19,10 @@ function AudioWave(props:{
 		setTime:Function, 
 		setTotalTime:Function,
 		height: Number,
-		volumeStyle: Object
+		volumeStyle: Object,
+		allowScrubbing:boolean,
+		disableLayerTitle:boolean,
+		scrubTo:Number,
 	}) {
 	
 	function togglePlay() {
@@ -114,7 +117,9 @@ function AudioWave(props:{
 				barRadius:1,
 			});
 			waveform.load(layer.audio)
-			waveform.toggleInteraction();
+			if (!props.allowScrubbing){
+				waveform.toggleInteraction();
+			}
 			waveArray.push(waveform);
 		}
 		setWaves(waveArray);
@@ -129,7 +134,7 @@ function AudioWave(props:{
 
 				return (
 					<div key={index} style={{"marginBottom":10, }}>
-						<p style={props.volumeStyle}>Layer {index + 1}</p>
+						{props.disableLayerTitle?<p style={props.volumeStyle}>Layer {index + 1}</p>:""}
 						<input 
 							type="range"
 							min="0"
@@ -154,7 +159,10 @@ function AudioWave(props:{
 }
 
 AudioWave.defaultProps={
-		setTotalTime:(han)=>{return han},
-		setTime:(han)=>{return han}
+	setTotalTime:(han)=>{return han},
+	setTime:(han)=>{return han},
+	allowScrubbing:false,
+	disableLayerTitle:false,
+	scrubTo:0,
 }
 export default AudioWave;

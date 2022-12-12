@@ -210,10 +210,10 @@ function SongPage() {
 						setTotalTime={setTrackLength}
 						setTime={setTimeSec}
 						volumeStyle={{color:"white", textAlign: "center", margin: 0}}
+						allowScrubbing
 					/>
 					</div>
 					<div className={styles["audio-control"]} >
-						<div className={styles["prev-track"]}> <BiSkipPrevious /> </div>
 						<div 
 							className={styles.play}
 							onClick={()=>{setIsPlaying(!isPlaying)}}
@@ -221,7 +221,6 @@ function SongPage() {
 							{!isPlaying && <FaPlayCircle />}
 							{isPlaying && <FaPauseCircle />}
 						</div>
-						<div className={styles["next-track"]}> <BiSkipNext /> </div>
 					</div>
 				</div>: 
 				<h1 style={{marginTop: "280px", textAlign:"center"}}>No Layers Added. . . </h1>}
