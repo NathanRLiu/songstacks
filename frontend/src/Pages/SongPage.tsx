@@ -204,7 +204,7 @@ function SongPage() {
 					<AudioWave
 						layerID={activeLayerID}
 						key={activeLayerID}
-						width={400}
+						width={1316}
 						height={80}
 						isPlaying={isPlaying} 
 						setTotalTime={setTrackLength}

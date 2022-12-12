@@ -35,15 +35,15 @@ function DiscoverDisplay(props: {show:boolean}) {
 		dispatch(actions.selectSong(newLayer))
 	}
 	useEffect(() => {
-	const getUser = async () => {
-		const response = await axios.get(`/api/layer/search?search=`, { withCredentials: true });
-		if (response.data==null) {
-			setSearchResults([]);
-			return;
+		const getUser = async () => {
+			const response = await axios.get(`/api/layer/search?search=`, { withCredentials: true });
+			if (response.data==null || response.data.searchResults == null) {
+				setSearchResults([]);
+				return;
+			}
+			setSearchResults(response.data.searchResults);
 		}
-		setSearchResults(response.data.searchResults);
-	}
-	getUser();
+		getUser();
 
 	}, [])
 

@@ -61,6 +61,7 @@
 	background-color:rgba(0,0,0,0);
 	border-bottom:2px solid #932FA7;
 	padding-left:5px;
+	width:80%;
 }
 .detail-editor .description {
 	background-color: rgba(50,50,50,.2);
@@ -120,7 +121,7 @@
 	margin-left: 10px;
 	border-radius: 8px;
 	height: 500px;
-	width: 870px;
+	margin-right:20px;
 }
 
 
@@ -171,7 +172,6 @@
 	justify-content:center;
 	display:flex;
 	margin-left:20px;
-	width: 870px;
 	grid-area:"toolbox";
 }
 .layer-finder{
@@ -282,6 +282,7 @@
 }
 .hover-overlay > p {
 	font-size: 20px;
+	text-align:center;
 }
 .album-cover {
 	height:100%;
