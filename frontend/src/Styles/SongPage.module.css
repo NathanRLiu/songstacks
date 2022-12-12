@@ -113,6 +113,14 @@
 
 .editor-section {
 	flex-grow:1;
+	z-index: 2;
+	background-color:#20202088;
+	border: #935FA728 solid 2px;
+	margin-top: 60px;
+	margin-left: 10px;
+	border-radius: 8px;
+	height: 500px;
+	width: 870px;
 }
 
 
@@ -163,6 +171,7 @@
 	justify-content:center;
 	display:flex;
 	margin-left:20px;
+	width: 870px;
 	grid-area:"toolbox";
 }
 .layer-finder{
@@ -193,7 +202,7 @@
 	overflow-x:scroll;
 	flex-direction:row;
 	display:flex;
-	width:80%;
+	width:90%;
 	margin-left: 40px;
 	height:70%;
 	position:relative;
@@ -380,11 +389,12 @@ h2{
 	background-color:inherit;
 }
 .audio-waves {
+	
 	overflow:scroll;
 	padding-left:25px;
 	padding-right:25px;
-	height:250px;
-	margin-top: 200px;
+	margin-top: 50px;
+	margin-bottom: 50px;
 }
 
 .audio-control{
